@@ -69,7 +69,7 @@
   }
   nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,.06); }
   .nav-inner { display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); }
-  .nav-logo { display: flex; align-items: center; height: 40px; transition: opacity .3s; }
+  .nav-logo { display: flex; align-items: center; height: 60px; transition: opacity .3s; }
   .nav-logo img { height: 100%; width: auto; display: block; }
   .nav-logo .logo-black { display: none; }
   body.hero-revealed .nav-logo .logo-white { display: none; }
@@ -152,6 +152,31 @@
   .estate-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 600; color: #fff; }
   .estate-loc { font-size: 13px; color: rgba(255,255,255,.7); margin-top: 4px; }
   @media (max-width: 860px) { .estates-grid { grid-template-columns: 1fr; } }
+
+  /* ─── VILLA FEATURES (photo stack recedes/fades as you scroll, feature grid stays put) ─── */
+  #villa-features { padding: 130px 0; background: var(--white); }
+  .vf-header { max-width: 640px; margin: 0 auto 64px; text-align: center; }
+  .vf-header .section-sub { margin-left: auto; margin-right: auto; }
+  .vf-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+
+  .vf-photo-stack { position: relative; height: 300vh; }
+  .vf-photo { position: sticky; top: calc(var(--nav-h) + 40px); height: 66vh; min-height: 420px; display: flex; }
+  .vf-photo-inner { position: relative; width: 100%; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.18); will-change: transform, opacity; }
+  .vf-photo-inner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .vf-photo-tag { position: absolute; left: 24px; bottom: 24px; background: var(--orange); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 8px 16px; }
+
+  .vf-grid-col { position: sticky; top: calc(var(--nav-h) + 40px); display: grid; grid-template-columns: 1fr 1fr; gap: 40px 32px; padding-top: 8px; }
+  .vf-item-icon { width: 40px; height: 40px; border: 1.5px solid var(--orange); color: var(--orange); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+  .vf-item-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; font-weight: 600; color: var(--black); margin-bottom: 8px; }
+  .vf-item-desc { font-size: 14px; color: var(--gray); line-height: 1.65; }
+
+  @media (max-width: 900px) {
+    .vf-layout { grid-template-columns: 1fr; }
+    .vf-grid-col { position: static; grid-template-columns: 1fr 1fr; margin-top: 40px; }
+    .vf-photo-stack { height: 220vh; }
+    .vf-photo { top: calc(var(--nav-h) + 20px); height: 52vh; min-height: 320px; }
+  }
+  @media (max-width: 560px) { .vf-grid-col { grid-template-columns: 1fr; } }
 
   /* ─── PROCESS (curve-in reveal) ─── */
   #process { padding: 130px 0 150px; background: var(--black); overflow: clip; }
@@ -304,6 +329,61 @@
     </div>
   </section>
 
+  <!-- VILLA FEATURES -->
+  <section id="villa-features">
+    <div class="container">
+      <div class="vf-header">
+        <span class="eyebrow">A Closer Look</span>
+        <h2 class="section-title">VILLA FEATURES</h2>
+        <p class="section-sub">A closer look at what makes each estate feel effortless — space, privacy, and design throughout.</p>
+      </div>
+      <div class="vf-layout">
+        <div class="vf-photo-stack" id="vfPhotoStack">
+          <div class="vf-photo">
+            <div class="vf-photo-inner">
+              <img src="https://images.unsplash.com/photo-1781795414968-8ece31826420?auto=format&fit=crop&w=1400&q=80" alt="Private pool and landscaped grounds">
+              <span class="vf-photo-tag">Outdoor Living</span>
+            </div>
+          </div>
+          <div class="vf-photo">
+            <div class="vf-photo-inner">
+              <img src="https://images.unsplash.com/photo-1668365011612-c7f87a1173fe?auto=format&fit=crop&w=1400&q=80" alt="Bright open living interior">
+              <span class="vf-photo-tag">Living Spaces</span>
+            </div>
+          </div>
+          <div class="vf-photo">
+            <div class="vf-photo-inner">
+              <img src="https://images.unsplash.com/photo-1762117360871-f11fbad00ee1?auto=format&fit=crop&w=1400&q=80" alt="Modern luxury kitchen">
+              <span class="vf-photo-tag">The Kitchen</span>
+            </div>
+          </div>
+        </div>
+        <div class="vf-grid-col">
+          <div class="vf-item">
+            <div class="vf-item-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18h18M3 18v2M21 18v2M7 10V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4"/></svg></div>
+            <div class="vf-item-title">5BR + Guest Suite</div>
+            <p class="vf-item-desc">A spacious layout with five bedrooms plus a separate guest suite for privacy.</p>
+          </div>
+          <div class="vf-item">
+            <div class="vf-item-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 12h20M4 12v6M20 12v6M6 12V9a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3M8 18v2M16 18v2"/></svg></div>
+            <div class="vf-item-title">Private Pool &amp; Spa</div>
+            <p class="vf-item-desc">Outdoor living elevated with an infinity pool, spa, and landscaped grounds.</p>
+          </div>
+          <div class="vf-item">
+            <div class="vf-item-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></div>
+            <div class="vf-item-title">Bright Open Interiors</div>
+            <p class="vf-item-desc">Sunlit living and dining spaces designed for both quiet days and entertaining.</p>
+          </div>
+          <div class="vf-item">
+            <div class="vf-item-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+            <div class="vf-item-title">Chef's Kitchen</div>
+            <p class="vf-item-desc">A fully outfitted modern kitchen built for real cooking, not just show.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- PROCESS -->
   <section id="process">
     <div class="container">
@@ -359,7 +439,7 @@
     // extracted at 12fps. Same canvas-draw + eased-frame technique used on the Willpower
     // Solutions site: plain image requests avoid the HTTP Range-request seek problem that
     // breaks <video> scroll-scrubbing on Cloudflare Workers asset hosting.
-    const HERO_FRAME_COUNT = 159;
+    const HERO_FRAME_COUNT = 198;
     const heroFramePath = i => `hero-frames/frame-${String(i).padStart(3, '0')}.jpg`;
     const heroFrames = new Array(HERO_FRAME_COUNT);
     for (let i = 1; i <= HERO_FRAME_COUNT; i++) {
@@ -390,7 +470,7 @@
     ];
 
     // Hero copy and the opaque nav only reveal in the final stretch of the tour.
-    const REVEAL_AT = 0.90;
+    const REVEAL_AT = 0.97;
 
     let prevStage = '', raf = false, lastDrawnFrame = -1, lastRequestedFrame = 1;
 
@@ -467,6 +547,32 @@
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'instant' });
     });
+
+    // VILLA FEATURES — each photo recedes (scales down, dims, fades) as the
+    // next one arrives and covers it, same technique used on the Willpower
+    // Solutions site's process-step cards.
+    (function () {
+      const photos = Array.from(document.querySelectorAll('#vfPhotoStack .vf-photo'));
+      if (!photos.length) return;
+      function tick() {
+        const vh = window.innerHeight;
+        photos.forEach((photo, i) => {
+          const next = photos[i + 1];
+          const inner = photo.querySelector('.vf-photo-inner');
+          if (!next) { inner.style.transform = ''; inner.style.opacity = ''; inner.style.filter = ''; return; }
+          const stickyTop = parseFloat(getComputedStyle(photo).top) || 0;
+          const dist = next.getBoundingClientRect().top - stickyTop;
+          const range = vh * 0.8;
+          const p = Math.max(0, Math.min(1, 1 - dist / range));
+          inner.style.transform = `scale(${1 - p * 0.12}) translateY(${-p * 40}px)`;
+          inner.style.opacity = String(1 - p * 0.85);
+          inner.style.filter = `brightness(${1 - p * 0.3})`;
+        });
+      }
+      window.addEventListener('scroll', () => requestAnimationFrame(tick), { passive: true });
+      window.addEventListener('resize', tick);
+      tick();
+    })();
 
     // PROCESS — curve-in reveal as each step scrolls into view
     const processObserver = new IntersectionObserver(entries => {
