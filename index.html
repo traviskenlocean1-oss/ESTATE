@@ -95,6 +95,11 @@
     filter: contrast(1.12) saturate(1.12) brightness(1.02);
   }
   .scrub-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.28) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 68%, rgba(0,0,0,.5) 100%); pointer-events: none; }
+
+  /* Giant centered logo, visible only at the very top of the hero - fades
+     out as soon as scrolling begins, leaving just the small nav-corner logo. */
+  .hero-giant-logo { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 5; }
+  .hero-giant-logo img { width: min(50vw, 460px); height: auto; filter: drop-shadow(0 8px 40px rgba(0,0,0,.5)); }
   .scrub-final-overlay {
     position: absolute; inset: 0; pointer-events: none; opacity: 0;
     background: linear-gradient(100deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,.42) 55%, rgba(0,0,0,.12) 100%);
@@ -184,19 +189,62 @@
   .process-header { text-align: center; margin-bottom: 80px; }
   .process-header .section-title, .process-header .eyebrow { color: #fff; }
   .process-header .section-sub { color: rgba(255,255,255,.55); margin-left: auto; margin-right: auto; }
-  .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
-  .process-step {
-    opacity: 0; transform: translate(var(--curve-x, 0), 70px) scale(.92);
-    transition: opacity 1s cubic-bezier(.16,.85,.3,1), transform 1.1s cubic-bezier(.16,.85,.3,1);
+
+  .process-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+
+  /* Photo sits behind two panels that slide apart (not a fade) once the
+     section scrolls into view - "doors opening" onto a new estate. */
+  .process-reveal { position: relative; aspect-ratio: 4/3; overflow: hidden; background: #000; }
+  .process-reveal img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .process-door { position: absolute; top: 0; bottom: 0; width: 50%; background: var(--black); z-index: 2; transition: transform 1.15s cubic-bezier(.65,0,.35,1); }
+  .process-door::after { content: ''; position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,.08); }
+  .process-door.left { left: 0; }
+  .process-door.left::after { right: 0; }
+  .process-door.right { right: 0; }
+  .process-door.right::after { left: 0; }
+  .process-reveal.open .process-door.left { transform: translateX(-100%); }
+  .process-reveal.open .process-door.right { transform: translateX(100%); }
+  .process-reveal-tag { position: absolute; left: 24px; bottom: 24px; z-index: 3; background: var(--orange); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 8px 16px; opacity: 0; transition: opacity .6s ease .5s; }
+  .process-reveal.open .process-reveal-tag { opacity: 1; }
+
+  .process-list { display: flex; flex-direction: column; gap: 44px; }
+  .process-row {
+    display: flex; gap: 22px; align-items: flex-start;
+    opacity: 0; transform: translateY(26px);
+    transition: opacity .8s cubic-bezier(.16,.85,.3,1), transform .9s cubic-bezier(.16,.85,.3,1);
   }
-  .process-step:nth-child(odd) { --curve-x: -46px; }
-  .process-step:nth-child(even) { --curve-x: 46px; }
-  .process-step.in-view { opacity: 1; transform: translate(0,0) scale(1); }
-  .process-num { font-family: 'Bricolage Grotesque', sans-serif; font-size: 15px; font-weight: 700; color: var(--orange); letter-spacing: 2px; margin-bottom: 18px; }
-  .process-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 600; color: #fff; margin-bottom: 12px; }
-  .process-desc { font-size: 14.5px; color: rgba(255,255,255,.55); line-height: 1.7; }
-  @media (max-width: 900px) { .process-grid { grid-template-columns: 1fr 1fr; row-gap: 56px; } }
-  @media (max-width: 560px) { .process-grid { grid-template-columns: 1fr; } }
+  .process-row.in-view { opacity: 1; transform: translateY(0); }
+  .process-num { flex-shrink: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 15px; font-weight: 700; color: var(--orange); letter-spacing: 2px; padding-top: 3px; }
+  .process-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 10px; }
+  .process-desc { font-size: 14.5px; color: rgba(255,255,255,.55); line-height: 1.7; max-width: 380px; }
+
+  @media (max-width: 900px) {
+    .process-layout { grid-template-columns: 1fr; gap: 52px; }
+  }
+
+  /* ─── FAQ ─── */
+  /* Deliberately not card-boxed - an editorial index list instead: hairline
+     dividers, large type, a plus that rotates into a minus. */
+  #faq { padding: 130px 0 150px; background: var(--white); }
+  .faq-header { max-width: 620px; margin: 0 auto 64px; text-align: center; }
+  .faq-header .section-sub { margin-left: auto; margin-right: auto; }
+  .faq-list { max-width: 840px; margin: 0 auto; }
+  .faq-item { border-top: 1px solid var(--border); }
+  .faq-item:last-child { border-bottom: 1px solid var(--border); }
+  .faq-q { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 32px 2px; background: none; border: none; cursor: pointer; text-align: left; font: inherit; color: inherit; }
+  .faq-q-text { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(18px, 2.2vw, 22px); font-weight: 600; color: var(--black); transition: color .25s; }
+  .faq-item.open .faq-q-text { color: var(--orange); }
+  .faq-plus { position: relative; width: 20px; height: 20px; flex-shrink: 0; }
+  .faq-plus::before, .faq-plus::after { content: ''; position: absolute; background: var(--black); transition: transform .4s cubic-bezier(.65,0,.35,1), background-color .25s; }
+  .faq-plus::before { top: 50%; left: 0; width: 100%; height: 1.5px; transform: translateY(-50%); }
+  .faq-plus::after { left: 50%; top: 0; height: 100%; width: 1.5px; transform: translateX(-50%); }
+  .faq-item.open .faq-plus::before, .faq-item.open .faq-plus::after { background: var(--orange); }
+  .faq-item.open .faq-plus::after { transform: translateX(-50%) rotate(90deg); }
+  .faq-a-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s cubic-bezier(.16,.85,.3,1); }
+  .faq-item.open .faq-a-wrap { grid-template-rows: 1fr; }
+  .faq-a-inner { overflow: hidden; }
+  .faq-a { padding: 0 40px 34px 2px; max-width: 620px; font-size: 15.5px; color: var(--gray); line-height: 1.8; }
+  @media (max-width: 640px) { .faq-a { padding-right: 2px; } }
 
   /* ─── FOOTER ─── */
   footer { background: var(--white); border-top: 1px solid var(--border); padding: 56px 0; }
@@ -244,6 +292,7 @@
       <div class="scrub-pin" id="scrub-pin">
         <canvas class="scrub-canvas" id="scrub-canvas"></canvas>
         <div class="scrub-overlay"></div>
+        <div class="hero-giant-logo" id="heroGiantLogo"><img src="logo-white.svg" alt="Meridian Estates"></div>
         <div class="scrub-final-overlay" id="scrub-final-overlay"></div>
         <div class="scrub-center">
           <div class="container">
@@ -393,26 +442,90 @@
         <h2 class="section-title">FROM FIRST LOOK<br>TO <span style="color:var(--orange)">KEYS IN HAND</span></h2>
         <p class="section-sub">A private, unhurried process — built around your schedule, not ours.</p>
       </div>
-      <div class="process-grid" id="processGrid">
-        <div class="process-step">
-          <div class="process-num">01</div>
-          <div class="process-title">Discover</div>
-          <p class="process-desc">A private consultation to understand what you're actually looking for — lifestyle first, listings second.</p>
+      <div class="process-layout">
+        <div class="process-reveal" id="processReveal">
+          <img src="https://images.unsplash.com/photo-1757359056339-22968344cce6?auto=format&fit=crop&w=1400&q=80" alt="A Meridian Estates property at dusk">
+          <span class="process-reveal-tag">Halcyon Villa</span>
+          <div class="process-door left"></div>
+          <div class="process-door right"></div>
         </div>
-        <div class="process-step">
-          <div class="process-num">02</div>
-          <div class="process-title">Curate</div>
-          <p class="process-desc">A hand-selected shortlist matched to you — not a scroll of everything on the market.</p>
+        <div class="process-list" id="processList">
+          <div class="process-row">
+            <div class="process-num">01</div>
+            <div>
+              <div class="process-title">Discover</div>
+              <p class="process-desc">A private consultation to understand what you're actually looking for — lifestyle first, listings second.</p>
+            </div>
+          </div>
+          <div class="process-row">
+            <div class="process-num">02</div>
+            <div>
+              <div class="process-title">Curate</div>
+              <p class="process-desc">A hand-selected shortlist matched to you — not a scroll of everything on the market.</p>
+            </div>
+          </div>
+          <div class="process-row">
+            <div class="process-num">03</div>
+            <div>
+              <div class="process-title">Experience</div>
+              <p class="process-desc">Private showings on your schedule, with the full context on every property you walk through.</p>
+            </div>
+          </div>
+          <div class="process-row">
+            <div class="process-num">04</div>
+            <div>
+              <div class="process-title">Arrive</div>
+              <p class="process-desc">A seamless close, handled end to end — so the only thing left to do is walk in.</p>
+            </div>
+          </div>
         </div>
-        <div class="process-step">
-          <div class="process-num">03</div>
-          <div class="process-title">Experience</div>
-          <p class="process-desc">Private showings on your schedule, with the full context on every property you walk through.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="faq-header">
+        <span class="eyebrow">Common Questions</span>
+        <h2 class="section-title">FREQUENTLY ASKED</h2>
+        <p class="section-sub">Everything people usually ask before their first showing.</p>
+      </div>
+      <div class="faq-list" id="faqList">
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span class="faq-q-text">How does Meridian Estates find properties before they're listed?</span>
+            <span class="faq-plus"></span>
+          </button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p class="faq-a">Through direct relationships with owners, developers, and other agents in our network — many of the estates we show never appear on public listing sites at all.</p></div></div>
         </div>
-        <div class="process-step">
-          <div class="process-num">04</div>
-          <div class="process-title">Arrive</div>
-          <p class="process-desc">A seamless close, handled end to end — so the only thing left to do is walk in.</p>
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span class="faq-q-text">Do you only work with buyers, or sellers too?</span>
+            <span class="faq-plus"></span>
+          </button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p class="faq-a">Both. For sellers, we handle private, discreet marketing to our existing buyer network before considering a public listing — often resulting in a faster, quieter sale.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span class="faq-q-text">What areas do you cover?</span>
+            <span class="faq-plus"></span>
+          </button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p class="faq-a">We focus on a curated set of coastal, hillside, and lakeside markets rather than spreading thin across an entire region — depth over breadth.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span class="faq-q-text">Is there a fee to work with Meridian Estates?</span>
+            <span class="faq-plus"></span>
+          </button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p class="faq-a">There's never a fee for buyers. For sellers, our commission is discussed and agreed upfront, with no surprises at closing.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span class="faq-q-text">How quickly can I schedule a private showing?</span>
+            <span class="faq-plus"></span>
+          </button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p class="faq-a">Most showings are arranged within 48 hours, and often sooner for serious buyers ready to move quickly on the right property.</p></div></div>
         </div>
       </div>
     </div>
@@ -464,10 +577,11 @@
     const scrubSub     = document.getElementById('scrub-sub');
     const scrubCtas    = document.getElementById('scrub-ctas');
     const finalOverlay = document.getElementById('scrub-final-overlay');
+    const heroGiantLogo = document.getElementById('heroGiantLogo');
 
     const stages = [
       { at: 0,    text: '' },
-      { at: 0.04, text: 'Golden Hour Arrivals' },
+      { at: 0.10, text: 'Golden Hour Arrivals' },
       { at: 0.40, text: 'Step Inside' },
       { at: 0.70, text: 'Your Private Retreat' },
     ];
@@ -524,6 +638,7 @@
       requestHeroFrame(1 + p * (HERO_FRAME_COUNT - 1));
       scrubBar.style.transform = `scaleX(${p})`;
       scrollHint.style.opacity = p < 0.03 ? 1 : 0;
+      heroGiantLogo.style.opacity = String(Math.max(0, 1 - p / 0.07));
 
       const revealed = p >= REVEAL_AT;
       const revealFade = Math.max(0, Math.min(1, (p - REVEAL_AT) / (1 - REVEAL_AT)));
@@ -577,11 +692,30 @@
       tick();
     })();
 
-    // PROCESS — curve-in reveal as each step scrolls into view
-    const processObserver = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); processObserver.unobserve(e.target); } });
+    // PROCESS — the two door panels slide apart to reveal the photo, then
+    // each step row fades up in sequence, once the section scrolls into view.
+    const processReveal = document.getElementById('processReveal');
+    if (processReveal) {
+      const doorObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { processReveal.classList.add('open'); doorObserver.unobserve(e.target); } });
+      }, { threshold: 0.4 });
+      doorObserver.observe(processReveal);
+    }
+    const processRows = document.querySelectorAll('.process-row');
+    const rowObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); rowObserver.unobserve(e.target); } });
     }, { threshold: 0.3 });
-    document.querySelectorAll('.process-step').forEach(el => processObserver.observe(el));
+    processRows.forEach((el, i) => { el.style.transitionDelay = (i * 0.1) + 's'; rowObserver.observe(el); });
+
+    // FAQ — accordion, one open at a time
+    const faqItems = document.querySelectorAll('#faqList .faq-item');
+    faqItems.forEach(item => {
+      item.querySelector('.faq-q').addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        faqItems.forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
   </script>
 </body>
 </html>
