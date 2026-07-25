@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Meridian Estates — curated luxury real estate. Private showings, hand-selected estates, and a seamless path from first look to keys in hand.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Meridian Estates | Curated Luxury Real Estate">
+<meta property="og:description" content="Curated luxury real estate. Private showings, hand-selected estates, and a seamless path from first look to keys in hand.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://meridianestates.com">
+<title>Meridian Estates | Curated Luxury Real Estate</title>
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="apple-touch-icon" href="logo.svg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "RealEstateAgent",
+  "name": "Meridian Estates",
+  "description": "Curated luxury real estate — hand-selected estates and private showings.",
+  "url": "https://meridianestates.com"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #fafaf8;
+    --orange: #ff6a00;
+    --orange-dark: #d95700;
+    --gray: #6b6866;
+    --border: #e6e3e0;
+    --nav-h: 84px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--white); color: var(--black); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #f0f0f0; }
+  ::-webkit-scrollbar-thumb { background: var(--orange); }
+
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+  .eyebrow { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--orange); margin-bottom: 14px; }
+  .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 4.5vw, 58px); font-weight: 600; line-height: 1.05; color: var(--black); letter-spacing: -.01em; }
+  .section-sub { font-size: 17px; color: var(--gray); max-width: 560px; margin-top: 16px; line-height: 1.7; }
+
+  .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--orange); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .5px; padding: 17px 34px; border: none; cursor: pointer; transition: background .2s, transform .15s; text-transform: uppercase; }
+  .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
+  .btn-outline { display: inline-flex; align-items: center; gap: 10px; background: transparent; color: #fff; font-weight: 600; font-size: 14px; letter-spacing: .5px; padding: 15px 32px; border: 1.5px solid rgba(255,255,255,.5); cursor: pointer; transition: background .2s, border-color .2s; text-transform: uppercase; }
+  .btn-outline:hover { background: rgba(255,255,255,.1); border-color: #fff; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: transparent; backdrop-filter: none;
+    border-bottom: 1px solid transparent;
+    transition: background-color .6s ease, backdrop-filter .6s ease, border-color .6s ease, box-shadow .3s;
+  }
+  body.hero-revealed nav {
+    background: rgba(250,250,248,.96); backdrop-filter: blur(16px); border-bottom-color: var(--border);
+  }
+  nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,.06); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); }
+  .nav-logo { display: flex; align-items: center; height: 40px; transition: opacity .3s; }
+  .nav-logo img { height: 100%; width: auto; display: block; }
+  .nav-logo .logo-black { display: none; }
+  body.hero-revealed .nav-logo .logo-white { display: none; }
+  body.hero-revealed .nav-logo .logo-black { display: block; }
+  .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+  .nav-links a:not(.btn-primary) { font-size: 13px; font-weight: 600; letter-spacing: .4px; color: #fff; text-transform: uppercase; transition: color .5s ease, text-shadow .5s ease; text-shadow: 0 1px 8px rgba(0,0,0,.4); }
+  body.hero-revealed .nav-links a:not(.btn-primary) { color: var(--black); text-shadow: none; }
+  .nav-links a:not(.btn-primary):hover { color: var(--orange); }
+  .nav-links .btn-primary { padding: 12px 26px; font-size: 12px; }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .nav-hamburger span { display: block; width: 22px; height: 2px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.4); transition: background-color .5s ease; }
+  body.hero-revealed .nav-hamburger span { background: var(--black); box-shadow: none; }
+  .nav-mobile { display: none; background: var(--white); border-top: 1px solid var(--border); padding: 20px 40px; }
+  .nav-mobile.open { display: block; }
+  .nav-mobile a { display: block; padding: 14px 0; font-size: 15px; font-weight: 600; color: var(--black); border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: .4px; }
+
+  /* ─── SCROLL-SCRUB FRAME-SEQUENCE HERO ─── */
+  .scrub-wrap { position: relative; height: 700vh; }
+  .scrub-pin { position: sticky; top: 0; height: 100vh; min-height: 620px; width: 100%; overflow: hidden; background: #0a0a0a; }
+  .scrub-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    filter: contrast(1.05) saturate(1.08) brightness(1.01);
+  }
+  .scrub-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.28) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 68%, rgba(0,0,0,.5) 100%); pointer-events: none; }
+  .scrub-final-overlay {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0;
+    background: linear-gradient(100deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,.42) 55%, rgba(0,0,0,.12) 100%);
+  }
+  .scrub-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: calc(var(--nav-h) + 24px) 0 0; pointer-events: none; }
+  .scrub-center .container { width: 100%; }
+  .scrub-inner { max-width: 660px; }
+  .scrub-eye {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 11px; font-weight: 700; letter-spacing: 4px;
+    color: var(--orange); text-transform: uppercase; margin-bottom: 20px;
+    opacity: 0; transition: opacity .6s ease;
+  }
+  .scrub-h1 {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+    font-size: clamp(42px, 6.4vw, 84px);
+    line-height: 1.04; color: #fff; margin-bottom: 24px; letter-spacing: -.01em;
+    text-shadow: 0 4px 40px rgba(0,0,0,.5);
+    opacity: 0; transition: opacity .6s ease;
+  }
+  .scrub-h1 .orange { color: var(--orange); }
+  .scrub-sub {
+    font-size: 17px; color: rgba(255,255,255,.78); max-width: 480px;
+    margin-bottom: 38px; line-height: 1.75; font-weight: 400;
+    opacity: 0; transition: opacity .6s ease;
+  }
+  .scrub-ctas { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; pointer-events: none; opacity: 0; transition: opacity .6s ease; }
+  .hero-revealed .scrub-eye, .hero-revealed .scrub-h1, .hero-revealed .scrub-sub, .hero-revealed .scrub-ctas { pointer-events: auto; }
+
+  /* stage label — small moments that appear/disappear as you scroll through the tour */
+  .stage-lbl {
+    position: absolute; bottom: 96px; left: 50%; transform: translateX(-50%);
+    font-family: 'Space Grotesk', sans-serif; font-size: clamp(16px, 2.4vw, 24px); font-weight: 600;
+    letter-spacing: .08em; color: #fff; text-transform: uppercase; text-shadow: 0 2px 16px rgba(0,0,0,.5);
+    opacity: 0; transition: opacity .5s; white-space: nowrap; pointer-events: none;
+  }
+  .stage-lbl::after { content:''; display:block; width: 44px; height: 2px; background: var(--orange); margin: 12px auto 0; }
+
+  .scroll-hint {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,.6); animation: bounce 2s ease-in-out infinite; transition: opacity .4s; pointer-events: none;
+  }
+  @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+  .scrub-bar { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--orange); width: 0%; transition: width .04s linear; }
+
+  /* ─── OUR ESTATES ─── */
+  #estates { padding: 130px 0; background: var(--white); }
+  .estates-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 56px; flex-wrap: wrap; gap: 24px; }
+  .estates-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .estate-card { position: relative; overflow: hidden; aspect-ratio: 4/3; background: #eee; }
+  .estate-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
+  .estate-card:hover img { transform: scale(1.04); }
+  .estate-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 55%, rgba(0,0,0,.78)); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px 34px; }
+  .estate-tag { display: inline-block; background: var(--orange); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; padding: 5px 12px; margin-bottom: 12px; width: fit-content; }
+  .estate-name { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 600; color: #fff; }
+  .estate-loc { font-size: 13px; color: rgba(255,255,255,.7); margin-top: 4px; }
+  @media (max-width: 860px) { .estates-grid { grid-template-columns: 1fr; } }
+
+  /* ─── PROCESS (curve-in reveal) ─── */
+  #process { padding: 130px 0 150px; background: var(--black); overflow: clip; }
+  .process-header { text-align: center; margin-bottom: 80px; }
+  .process-header .section-title, .process-header .eyebrow { color: #fff; }
+  .process-header .section-sub { color: rgba(255,255,255,.55); margin-left: auto; margin-right: auto; }
+  .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+  .process-step {
+    opacity: 0; transform: translate(var(--curve-x, 0), 70px) scale(.92);
+    transition: opacity 1s cubic-bezier(.16,.85,.3,1), transform 1.1s cubic-bezier(.16,.85,.3,1);
+  }
+  .process-step:nth-child(odd) { --curve-x: -46px; }
+  .process-step:nth-child(even) { --curve-x: 46px; }
+  .process-step.in-view { opacity: 1; transform: translate(0,0) scale(1); }
+  .process-num { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--orange); letter-spacing: 2px; margin-bottom: 18px; }
+  .process-title { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; color: #fff; margin-bottom: 12px; }
+  .process-desc { font-size: 14.5px; color: rgba(255,255,255,.55); line-height: 1.7; }
+  @media (max-width: 900px) { .process-grid { grid-template-columns: 1fr 1fr; row-gap: 56px; } }
+  @media (max-width: 560px) { .process-grid { grid-template-columns: 1fr; } }
+
+  /* ─── FOOTER ─── */
+  footer { background: var(--white); border-top: 1px solid var(--border); padding: 56px 0; }
+  .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+  .footer-logo { height: 34px; }
+  .footer-copy { font-size: 13px; color: var(--gray); }
+
+  @media (max-width: 900px) {
+    .container { padding: 0 24px; }
+    .nav-links a:not(.btn-primary), .nav-links .btn-primary { display: none; }
+    .nav-hamburger { display: flex; }
+    .scrub-wrap { height: 480vh; }
+    .scrub-center { padding-top: calc(var(--nav-h) + 20px); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="container nav-inner">
+      <a href="#hero" class="nav-logo" id="navLogo" aria-label="Meridian Estates">
+        <img src="logo-white.svg" alt="Meridian Estates" class="logo-white">
+        <img src="logo.svg" alt="Meridian Estates" class="logo-black">
+      </a>
+      <ul class="nav-links">
+        <li><a href="#estates">Estates</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="services.html" class="btn-primary">Contact</a></li>
+      </ul>
+      <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+    <div class="nav-mobile" id="mobileMenu">
+      <a href="#estates">Estates</a>
+      <a href="services.html">Services</a>
+      <a href="#process">Process</a>
+      <a href="services.html">Contact</a>
+    </div>
+  </nav>
+
+  <!-- SCROLL-SCRUB FRAME-SEQUENCE HERO -->
+  <section id="hero">
+    <div class="scrub-wrap" id="scrub-wrap">
+      <div class="scrub-pin" id="scrub-pin">
+        <canvas class="scrub-canvas" id="scrub-canvas"></canvas>
+        <div class="scrub-overlay"></div>
+        <div class="scrub-final-overlay" id="scrub-final-overlay"></div>
+        <div class="scrub-center">
+          <div class="container">
+            <div class="scrub-inner">
+              <div class="scrub-eye" id="scrub-eye">Meridian Estates</div>
+              <h1 class="scrub-h1" id="scrub-h1">HOMES THAT FEEL<br>LIKE YOU'VE<br><span class="orange">ARRIVED.</span></h1>
+              <p class="scrub-sub" id="scrub-sub">Curated luxury estates, private showings, and a path from first look to keys in hand — no detail overlooked.</p>
+              <div class="scrub-ctas" id="scrub-ctas">
+                <a href="#estates" class="btn-primary">View Our Estates</a>
+                <a href="services.html" class="btn-outline">Contact Us</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="stage-lbl" id="stage-lbl"></div>
+        <div class="scroll-hint" id="scroll-hint">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        </div>
+        <div class="scrub-bar" id="scrub-bar"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR ESTATES -->
+  <section id="estates">
+    <div class="container">
+      <div class="estates-header">
+        <div>
+          <span class="eyebrow">Curated Listings</span>
+          <h2 class="section-title">OUR ESTATES</h2>
+        </div>
+        <p class="section-sub">Six hand-selected properties. Each one previewed here before it ever reaches a showing.</p>
+      </div>
+      <div class="estates-grid">
+        <div class="estate-card">
+          <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80" alt="Modern luxury estate exterior" loading="lazy">
+          <div class="estate-overlay">
+            <span class="estate-tag">Villa</span>
+            <div class="estate-name">The Solmar Residence</div>
+            <div class="estate-loc">Coastal Ridge</div>
+          </div>
+        </div>
+        <div class="estate-card">
+          <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80" alt="Modern luxury villa exterior" loading="lazy">
+          <div class="estate-overlay">
+            <span class="estate-tag">Estate</span>
+            <div class="estate-name">Villa Aurelia</div>
+            <div class="estate-loc">Highland Point</div>
+          </div>
+        </div>
+        <div class="estate-card">
+          <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80" alt="Contemporary luxury home exterior" loading="lazy">
+          <div class="estate-overlay">
+            <span class="estate-tag">Residence</span>
+            <div class="estate-name">The Meridian House</div>
+            <div class="estate-loc">Lakeside Bluff</div>
+          </div>
+        </div>
+        <div class="estate-card">
+          <img src="https://images.unsplash.com/photo-1706808849780-7a04fbac83ef?auto=format&fit=crop&w=1200&q=80" alt="Modern estate exterior with pool" loading="lazy">
+          <div class="estate-overlay">
+            <span class="estate-tag">Villa</span>
+            <div class="estate-name">Halcyon Villa</div>
+            <div class="estate-loc">Vineyard Hills</div>
+          </div>
+        </div>
+        <div class="estate-card">
+          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80" alt="Luxury modern house exterior" loading="lazy">
+          <div class="estate-overlay">
+            <span class="estate-tag">Estate</span>
+            <div class="estate-name">The Ember House</div>
+            <div class="estate-loc">Desert Canyon</div>
+          </div>
+        </div>
+        <div class="estate-card">
+          <img src="https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?auto=format&fit=crop&w=1200&q=80" alt="Modern luxury villa with pool at dusk" loading="lazy">
+          <div class="estate-overlay">
+            <span class="estate-tag">Residence</span>
+            <div class="estate-name">Lumen Residence</div>
+            <div class="estate-loc">Cliffside Point</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="container">
+      <div class="process-header">
+        <span class="eyebrow">How It Works</span>
+        <h2 class="section-title">FROM FIRST LOOK<br>TO <span style="color:var(--orange)">KEYS IN HAND</span></h2>
+        <p class="section-sub">A private, unhurried process — built around your schedule, not ours.</p>
+      </div>
+      <div class="process-grid" id="processGrid">
+        <div class="process-step">
+          <div class="process-num">01</div>
+          <div class="process-title">Discover</div>
+          <p class="process-desc">A private consultation to understand what you're actually looking for — lifestyle first, listings second.</p>
+        </div>
+        <div class="process-step">
+          <div class="process-num">02</div>
+          <div class="process-title">Curate</div>
+          <p class="process-desc">A hand-selected shortlist matched to you — not a scroll of everything on the market.</p>
+        </div>
+        <div class="process-step">
+          <div class="process-num">03</div>
+          <div class="process-title">Experience</div>
+          <p class="process-desc">Private showings on your schedule, with the full context on every property you walk through.</p>
+        </div>
+        <div class="process-step">
+          <div class="process-num">04</div>
+          <div class="process-title">Arrive</div>
+          <p class="process-desc">A seamless close, handled end to end — so the only thing left to do is walk in.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-inner">
+      <img src="logo.svg" alt="Meridian Estates" class="footer-logo">
+      <div class="footer-copy">&copy; 2026 Meridian Estates. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // NAV
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+    document.querySelectorAll('.nav-mobile a').forEach(l => l.addEventListener('click', () => mobileMenu.classList.remove('open')));
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
+
+    // SCROLL-SCRUB FRAME-SEQUENCE HERO
+    // 159 frames combined from 3 separate Kling generations (exterior -> foyer -> pool),
+    // extracted at 12fps. Same canvas-draw + eased-frame technique used on the Willpower
+    // Solutions site: plain image requests avoid the HTTP Range-request seek problem that
+    // breaks <video> scroll-scrubbing on Cloudflare Workers asset hosting.
+    const HERO_FRAME_COUNT = 159;
+    const heroFramePath = i => `hero-frames/frame-${String(i).padStart(3, '0')}.jpg`;
+    const heroFrames = new Array(HERO_FRAME_COUNT);
+    for (let i = 1; i <= HERO_FRAME_COUNT; i++) {
+      const img = new Image();
+      img.src = heroFramePath(i);
+      img.onload = () => { if (i === 1) drawHeroFrame(1); };
+      heroFrames[i] = img;
+    }
+
+    const scrubCanvas  = document.getElementById('scrub-canvas');
+    const scrubCtx     = scrubCanvas.getContext('2d');
+    const scrubWrap    = document.getElementById('scrub-wrap');
+    const scrubPin     = document.getElementById('scrub-pin');
+    const scrollHint   = document.getElementById('scroll-hint');
+    const stageLbl     = document.getElementById('stage-lbl');
+    const scrubBar     = document.getElementById('scrub-bar');
+    const scrubEye     = document.getElementById('scrub-eye');
+    const scrubH1      = document.getElementById('scrub-h1');
+    const scrubSub     = document.getElementById('scrub-sub');
+    const scrubCtas    = document.getElementById('scrub-ctas');
+    const finalOverlay = document.getElementById('scrub-final-overlay');
+
+    const stages = [
+      { at: 0,    text: '' },
+      { at: 0.04, text: 'Golden Hour Arrivals' },
+      { at: 0.40, text: 'Step Inside' },
+      { at: 0.70, text: 'Your Private Retreat' },
+    ];
+
+    // Hero copy and the opaque nav only reveal in the final stretch of the tour.
+    const REVEAL_AT = 0.90;
+
+    let prevStage = '', raf = false, lastDrawnFrame = -1, lastRequestedFrame = 1;
+
+    function sizeHeroCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      scrubCanvas.width = Math.round(scrubPin.clientWidth * dpr);
+      scrubCanvas.height = Math.round(scrubPin.clientHeight * dpr);
+      lastDrawnFrame = -1;
+      drawHeroFrame(Math.max(1, lastRequestedFrame));
+    }
+
+    function drawHeroFrame(n) {
+      lastRequestedFrame = n;
+      let idx = Math.round(n);
+      while (idx > 1 && !(heroFrames[idx] && heroFrames[idx].complete && heroFrames[idx].naturalWidth)) idx--;
+      const img = heroFrames[idx];
+      if (!img || !img.complete || !img.naturalWidth || idx === lastDrawnFrame) return;
+      lastDrawnFrame = idx;
+      const cw = scrubCanvas.width, ch = scrubCanvas.height;
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      const scale = Math.max(cw / iw, ch / ih);
+      const dw = iw * scale, dh = ih * scale;
+      scrubCtx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    }
+
+    // Eases the drawn frame toward the scroll-derived target every animation frame,
+    // instead of snapping instantly, so the tour reads as continuous motion.
+    let targetFrame = 1, smoothedFrame = 1, smoothLoopRunning = false;
+    function frameSmoothLoop() {
+      smoothedFrame += (targetFrame - smoothedFrame) * 0.09;
+      if (Math.abs(targetFrame - smoothedFrame) < 0.04) smoothedFrame = targetFrame;
+      drawHeroFrame(smoothedFrame);
+      if (smoothedFrame !== targetFrame) requestAnimationFrame(frameSmoothLoop);
+      else smoothLoopRunning = false;
+    }
+    function requestHeroFrame(n) {
+      targetFrame = n;
+      if (!smoothLoopRunning) { smoothLoopRunning = true; requestAnimationFrame(frameSmoothLoop); }
+    }
+
+    function scrubProg() {
+      const t = scrubWrap.offsetTop, h = scrubWrap.offsetHeight, vh = window.innerHeight;
+      return Math.max(0, Math.min(1, (window.scrollY - t) / (h - vh)));
+    }
+
+    function scrubTick() {
+      const p = scrubProg();
+      requestHeroFrame(1 + p * (HERO_FRAME_COUNT - 1));
+      scrubBar.style.width = (p * 100) + '%';
+      scrollHint.style.opacity = p < 0.03 ? 1 : 0;
+
+      const revealed = p >= REVEAL_AT;
+      const revealFade = Math.max(0, Math.min(1, (p - REVEAL_AT) / (1 - REVEAL_AT)));
+      scrubH1.style.opacity = scrubSub.style.opacity = scrubEye.style.opacity = scrubCtas.style.opacity = revealFade;
+      finalOverlay.style.opacity = revealFade;
+      document.body.classList.toggle('hero-revealed', revealed);
+
+      let active = '';
+      for (let i = stages.length - 1; i >= 0; i--) { if (p >= stages[i].at) { active = stages[i].text; break; } }
+      if (revealed) active = '';
+      if (active !== prevStage) {
+        prevStage = active;
+        stageLbl.textContent = active;
+        stageLbl.style.opacity = active && p > 0.04 ? 1 : 0;
+      }
+      raf = false;
+    }
+
+    window.addEventListener('scroll', () => { if (!raf) { raf = true; requestAnimationFrame(scrubTick); } }, { passive: true });
+    window.addEventListener('resize', sizeHeroCanvas);
+    sizeHeroCanvas();
+
+    document.getElementById('navLogo').addEventListener('click', e => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+
+    // PROCESS — curve-in reveal as each step scrolls into view
+    const processObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); processObserver.unobserve(e.target); } });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.process-step').forEach(el => processObserver.observe(el));
+  </script>
+</body>
+</html>

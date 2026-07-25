@@ -1,0 +1,11 @@
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
+
+# raw source clips - only the extracted hero-frames/*.jpg are served
+shot-exterior.mp4
+shot-foyer.mp4
+shot-pool.mp4

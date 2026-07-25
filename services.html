@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Meridian Estates — curated luxury real estate services.">
+<meta name="robots" content="noindex, follow">
+<title>Services | Meridian Estates</title>
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="apple-touch-icon" href="logo.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --black: #0a0a0a; --white: #fafaf8; --orange: #ff6a00;
+    --orange-dark: #d95700; --gray: #6b6866; --border: #e6e3e0; --nav-h: 84px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--white); color: var(--black); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+  .eyebrow { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--orange); margin-bottom: 14px; }
+  .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 4.5vw, 58px); font-weight: 600; line-height: 1.05; letter-spacing: -.01em; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--orange); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .5px; padding: 15px 30px; border: none; cursor: pointer; transition: background .2s, transform .15s; text-transform: uppercase; }
+  .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(250,250,248,.96); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); }
+  .nav-logo { display: flex; align-items: center; height: 40px; }
+  .nav-logo img { height: 100%; width: auto; }
+  .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+  .nav-links a:not(.btn-primary) { font-size: 13px; font-weight: 600; letter-spacing: .4px; color: var(--black); text-transform: uppercase; transition: color .2s; }
+  .nav-links a:not(.btn-primary):hover { color: var(--orange); }
+  .nav-links .btn-primary { padding: 12px 26px; font-size: 12px; }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--black); }
+  .nav-mobile { display: none; background: var(--white); border-top: 1px solid var(--border); padding: 20px 40px; }
+  .nav-mobile.open { display: block; }
+  .nav-mobile a { display: block; padding: 14px 0; font-size: 15px; font-weight: 600; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: .4px; }
+
+  .placeholder-hero { padding: calc(var(--nav-h) + 140px) 0 160px; text-align: center; }
+  .placeholder-hero p { max-width: 520px; margin: 22px auto 0; color: var(--gray); font-size: 17px; }
+
+  footer { background: var(--white); border-top: 1px solid var(--border); padding: 56px 0; }
+  .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+  .footer-logo { height: 34px; }
+  .footer-copy { font-size: 13px; color: var(--gray); }
+
+  @media (max-width: 900px) {
+    .container { padding: 0 24px; }
+    .nav-links a:not(.btn-primary), .nav-links .btn-primary { display: none; }
+    .nav-hamburger { display: flex; }
+  }
+</style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Meridian Estates">
+        <img src="logo.svg" alt="Meridian Estates">
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#estates">Estates</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="index.html#process">Process</a></li>
+        <li><a href="services.html" class="btn-primary">Contact</a></li>
+      </ul>
+      <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+    <div class="nav-mobile" id="mobileMenu">
+      <a href="index.html#estates">Estates</a>
+      <a href="services.html">Services</a>
+      <a href="index.html#process">Process</a>
+      <a href="services.html">Contact</a>
+    </div>
+  </nav>
+
+  <section class="placeholder-hero">
+    <div class="container">
+      <span class="eyebrow">Coming Soon</span>
+      <h1 class="section-title">SERVICES</h1>
+      <p>This page is still being built out. In the meantime, take a look at our estates or reach out directly.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-inner">
+      <img src="logo.svg" alt="Meridian Estates" class="footer-logo">
+      <div class="footer-copy">&copy; 2026 Meridian Estates. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+    document.querySelectorAll('.nav-mobile a').forEach(l => l.addEventListener('click', () => mobileMenu.classList.remove('open')));
+  </script>
+</body>
+</html>
