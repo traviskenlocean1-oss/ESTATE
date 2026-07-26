@@ -69,8 +69,8 @@
   }
   nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,.06); }
   .nav-inner { display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); }
-  .nav-logo { display: flex; align-items: center; height: 168px; transition: opacity .3s, height .35s cubic-bezier(.22,1,.36,1); }
-  nav.scrolled .nav-logo { height: 108px; }
+  .nav-logo { display: flex; align-items: center; height: 168px; transform-origin: center; transition: opacity .3s, transform .35s cubic-bezier(.22,1,.36,1); }
+  nav.scrolled .nav-logo { transform: scale(0.643); }
   .nav-logo img { height: 100%; width: auto; display: block; }
   .nav-logo .logo-black { display: none; }
   body.hero-revealed .nav-logo .logo-white { display: none; }
