@@ -317,7 +317,11 @@
   /* ─── FOOTER ─── */
   footer { background: var(--black); padding: 90px 0 0; overflow: hidden; }
   .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 60px; border-bottom: 1px solid rgba(255,255,255,.1); }
-  .footer-logo { height: 30px; margin-bottom: 20px; }
+  /* The source SVG's declared canvas is a 1024x1024 square, but the actual
+     mark is a much shorter wide rectangle letterboxed inside it - so a
+     plain height on the <img> was rendering the visible logo at roughly
+     half that height. Sized up here to compensate. */
+  .footer-logo { height: 80px; margin-bottom: 24px; }
   .footer-desc { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.75; max-width: 280px; margin-bottom: 26px; }
   .footer-social { display: flex; gap: 12px; }
   .footer-social a { width: 34px; height: 34px; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.65); transition: border-color .2s, color .2s; }
@@ -756,35 +760,51 @@
     // extracted at 12fps. Same canvas-draw + eased-frame technique used on the Willpower
     // Solutions site: plain image requests avoid the HTTP Range-request seek problem that
     // breaks <video> scroll-scrubbing on Cloudflare Workers asset hosting.
-    // Frames are now 1080p-class (upscaled from the original 832px Kling
-    // output for sharpness), which makes the full set ~40MB. Requesting all
-    // 315 at once on page load - which is what this used to do - saturates
-    // the connection and leaves whatever frame you scroll to mid-download,
-    // showing as stutter. Instead: load a small window up front so playback
-    // starts smoothly, stream the rest in the background a few at a time,
-    // and prioritize whatever frame is actually requested so scrolling
-    // ahead of the background queue self-heals immediately.
+    // Frames are 1440px-class (upscaled from the original 832px Kling
+    // output for sharpness). Requesting all 315 at once on page load - what
+    // this used to do - saturated the connection and left whatever frame
+    // you scrolled to mid-download, showing as stutter. A first fix
+    // throttled background loading but still fired an unbounded number of
+    // "priority" requests as the target frame changed every scroll tick -
+    // during a fast scroll that's dozens of large concurrent downloads all
+    // competing with each other, none finishing in time, which is exactly
+    // the "gets stuck near the end, have to scroll back and forth" report.
+    // This version caps how many frame requests can be in flight at once
+    // and lets a priority request jump the queue instead of adding to the
+    // pile, so bandwidth stays focused on frames that are actually useful.
     const HERO_FRAME_COUNT = 315;
     const heroFramePath = i => `hero-frames/frame-${String(i).padStart(3, '0')}.jpg`;
     const heroFrames = new Array(HERO_FRAME_COUNT + 1);
-    const heroFrameRequested = new Array(HERO_FRAME_COUNT + 1).fill(false);
-    function ensureHeroFrame(i) {
-      if (i < 1 || i > HERO_FRAME_COUNT || heroFrameRequested[i]) return;
-      heroFrameRequested[i] = true;
-      const img = new Image();
-      img.src = heroFramePath(i);
-      img.onload = () => { if (i === 1) drawHeroFrame(1); };
-      heroFrames[i] = img;
-    }
-    for (let i = 1; i <= 24; i++) ensureHeroFrame(i);
-    let bgFrameNext = 25;
-    function backgroundLoadFrames() {
-      for (let n = 0; n < 4 && bgFrameNext <= HERO_FRAME_COUNT; n++, bgFrameNext++) ensureHeroFrame(bgFrameNext);
-      if (bgFrameNext <= HERO_FRAME_COUNT) {
-        (window.requestIdleCallback || (fn => setTimeout(fn, 150)))(backgroundLoadFrames);
+    const heroFrameState = new Array(HERO_FRAME_COUNT + 1).fill(0); // 0 none, 1 queued, 2 loading/done
+    const heroLoadQueue = [];
+    let heroActiveLoads = 0;
+    const HERO_MAX_CONCURRENT = 4;
+    function pumpHeroQueue() {
+      while (heroActiveLoads < HERO_MAX_CONCURRENT && heroLoadQueue.length) {
+        const i = heroLoadQueue.shift();
+        heroFrameState[i] = 2;
+        heroActiveLoads++;
+        const img = new Image();
+        const done = () => { heroActiveLoads--; if (i === 1) drawHeroFrame(1); pumpHeroQueue(); };
+        img.onload = done;
+        img.onerror = done;
+        img.src = heroFramePath(i);
+        heroFrames[i] = img;
       }
     }
-    backgroundLoadFrames();
+    function ensureHeroFrame(i, priority) {
+      if (i < 1 || i > HERO_FRAME_COUNT) return;
+      if (heroFrameState[i] === 1) {
+        if (priority) { heroLoadQueue.splice(heroLoadQueue.indexOf(i), 1); heroLoadQueue.unshift(i); pumpHeroQueue(); }
+        return;
+      }
+      if (heroFrameState[i]) return;
+      heroFrameState[i] = 1;
+      if (priority) heroLoadQueue.unshift(i); else heroLoadQueue.push(i);
+      pumpHeroQueue();
+    }
+    for (let i = 1; i <= 12; i++) ensureHeroFrame(i, true);
+    for (let i = 13; i <= HERO_FRAME_COUNT; i++) ensureHeroFrame(i, false);
 
     const scrubCanvas  = document.getElementById('scrub-canvas');
     const scrubCtx     = scrubCanvas.getContext('2d');
@@ -827,9 +847,9 @@
       let idx = Math.round(n);
       // Prioritize the frame actually being scrolled to (plus a short
       // lookahead) over the background queue's sequential order.
-      ensureHeroFrame(idx);
-      ensureHeroFrame(idx + 1);
-      ensureHeroFrame(idx + 2);
+      ensureHeroFrame(idx, true);
+      ensureHeroFrame(idx + 1, true);
+      ensureHeroFrame(idx + 2, true);
       while (idx > 1 && !(heroFrames[idx] && heroFrames[idx].complete && heroFrames[idx].naturalWidth)) idx--;
       const img = heroFrames[idx];
       if (!img || !img.complete || !img.naturalWidth || idx === lastDrawnFrame) return;
@@ -894,6 +914,12 @@
     window.addEventListener('scroll', () => { if (!raf) { raf = true; requestAnimationFrame(scrubTick); } }, { passive: true });
     window.addEventListener('resize', sizeHeroCanvas);
     sizeHeroCanvas();
+
+    // On a back/forward-cache restore the browser keeps the previous scroll
+    // position but doesn't replay the events that produced it, so anything
+    // scroll-derived (hero-revealed, the nav logo swap, the scrub canvas)
+    // can end up stale until the next real scroll. Force a resync.
+    window.addEventListener('pageshow', e => { if (e.persisted) { sizeHeroCanvas(); scrubTick(); } });
 
     document.getElementById('navLogo').addEventListener('click', e => {
       e.preventDefault();
