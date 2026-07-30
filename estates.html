@@ -54,17 +54,38 @@
   .pg-hero { padding: calc(var(--nav-h) + 120px) 0 90px; text-align: center; }
   .pg-hero .section-sub { margin: 20px auto 0; }
 
-  /* ─── LISTINGS GRID ─── */
-  #listings { padding: 20px 0 150px; }
-  .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-  .estate-card { position: relative; overflow: hidden; aspect-ratio: 4/3; background: #eee; transition: transform .5s cubic-bezier(.16,.85,.3,1), box-shadow .5s cubic-bezier(.16,.85,.3,1); }
-  .estate-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(0,0,0,.22); }
-  .estate-card img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.12); transition: transform .6s ease; }
-  .estate-card:hover img { transform: scale(1.16); }
-  .estate-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 55%, rgba(0,0,0,.78)); display: flex; flex-direction: column; justify-content: flex-end; padding: 26px 28px; }
-  .estate-tag { display: inline-block; background: var(--orange); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; padding: 5px 12px; margin-bottom: 12px; width: fit-content; }
-  .estate-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 600; color: #fff; }
-  .estate-loc { font-size: 13px; color: rgba(255,255,255,.7); margin-top: 4px; }
+  /* ─── ABOUT BAND (story + stats) ─── */
+  #about-band { padding: 20px 0 100px; }
+  .about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; padding-bottom: 70px; border-bottom: 1px solid var(--border); }
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 28px; text-align: left; }
+  .stat-num { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(30px, 3.4vw, 44px); font-weight: 700; color: var(--black); letter-spacing: -.01em; }
+  .stat-num .orange { color: var(--orange); }
+  .stat-label { font-size: 12px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--gray); margin-top: 8px; }
+
+  /* ─── WHY CHOOSE US (hairline-divider rows, matches services.html) ─── */
+  #why-us { padding: 70px 0 20px; }
+  .why-us-header { max-width: 640px; margin: 0 0 46px; }
+  .svc-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+  .svc-row { display: flex; align-items: flex-start; gap: 22px; padding: 30px 0; border-top: 1px solid var(--border); }
+  .svc-icon { flex-shrink: 0; width: 46px; height: 46px; border: 1.5px solid var(--orange); color: var(--orange); display: flex; align-items: center; justify-content: center; }
+  .svc-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; font-weight: 600; color: var(--black); margin-bottom: 6px; }
+  .svc-desc { font-size: 14px; color: var(--gray); line-height: 1.7; }
+
+  /* ─── LISTINGS (full-width alternating rows, not a repeating grid) ─── */
+  #listings { padding: 40px 0 150px; }
+  .listings-rows { display: flex; flex-direction: column; }
+  .listing-row { display: grid; grid-template-columns: 1.15fr 1fr; gap: 60px; align-items: center; padding: 60px 0; border-bottom: 1px solid var(--border); }
+  .listing-row:first-child { padding-top: 0; }
+  .listing-row.reverse { grid-template-columns: 1fr 1.15fr; }
+  .listing-row.reverse .listing-media { order: 2; }
+  .listing-row.reverse .listing-copy { order: 1; }
+  .listing-media { position: relative; overflow: hidden; aspect-ratio: 4/3; background: #eee; }
+  .listing-media img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.06); transition: transform .8s cubic-bezier(.16,.85,.3,1); }
+  .listing-row:hover .listing-media img { transform: scale(1.13); }
+  .estate-tag { display: inline-block; background: var(--orange); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; padding: 5px 12px; width: fit-content; }
+  .listing-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(24px, 2.4vw, 32px); font-weight: 600; color: var(--black); margin: 16px 0 4px; }
+  .listing-loc { font-size: 13px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--gray); }
+  .listing-desc { font-size: 15px; color: var(--gray); line-height: 1.75; margin-top: 20px; max-width: 440px; }
 
   #cta-band { padding: 20px 0 130px; text-align: center; }
   #cta-band .section-sub { margin: 18px auto 34px; }
@@ -85,15 +106,19 @@
   .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 26px 0; font-size: 12.5px; color: rgba(255,255,255,.4); }
   .footer-giant { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; text-align: center; line-height: .8; color: rgba(255,106,0,.14); font-size: clamp(46px, 8.6vw, 150px); letter-spacing: -.01em; user-select: none; white-space: nowrap; padding-bottom: .04em; }
 
-  @media (max-width: 1000px) { .listings-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 900px) {
     .container { padding: 0 24px; }
     .nav-links a:not(.btn-primary), .nav-links .btn-primary { display: none; }
     .nav-hamburger { display: flex; }
     .footer-top { grid-template-columns: 1fr 1fr; row-gap: 44px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .svc-list { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .listing-row, .listing-row.reverse { grid-template-columns: 1fr; gap: 26px; padding: 40px 0; }
+    .listing-row.reverse .listing-media, .listing-row.reverse .listing-copy { order: initial; }
   }
   @media (max-width: 600px) {
-    .listings-grid { grid-template-columns: 1fr; }
     .footer-top { grid-template-columns: 1fr; }
   }
 </style>
@@ -129,56 +154,187 @@
     </div>
   </section>
 
+  <!-- ABOUT (story + stats) -->
+  <section id="about-band">
+    <div class="container">
+      <div class="about-grid">
+        <div class="fade-up">
+          <span class="eyebrow">Who We Are</span>
+          <h2 class="section-title">TWO DECADES OF QUIET EXPERTISE</h2>
+          <p class="section-sub">Meridian Estates has spent the last two decades quietly matching discerning buyers with the finest private properties in the country. We don't chase volume — we chase fit, previewing every estate ourselves before it ever reaches a client, and managing the entire path from first look to keys in hand.</p>
+        </div>
+        <div class="stats-grid">
+          <div class="fade-up">
+            <div class="stat-num"><span class="orange">$</span><span class="count-up" data-target="500">0</span><span class="orange">M+</span></div>
+            <div class="stat-label">In Sales</div>
+          </div>
+          <div class="fade-up">
+            <div class="stat-num"><span class="count-up" data-target="150">0</span><span class="orange">+</span></div>
+            <div class="stat-label">Estates Sold</div>
+          </div>
+          <div class="fade-up">
+            <div class="stat-num"><span class="count-up" data-target="20">0</span><span class="orange">+</span></div>
+            <div class="stat-label">Years Combined Experience</div>
+          </div>
+          <div class="fade-up">
+            <div class="stat-num"><span class="count-up" data-target="98">0</span><span class="orange">%</span></div>
+            <div class="stat-label">Client Satisfaction</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section id="why-us">
+    <div class="container">
+      <div class="why-us-header">
+        <span class="eyebrow fade-up">Why Meridian</span>
+        <h2 class="section-title fade-up">WHY CHOOSE US</h2>
+      </div>
+      <div class="svc-list">
+        <div class="svc-row fade-up">
+          <div class="svc-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div>
+            <div class="svc-title">Private Showings</div>
+            <p class="svc-desc">Every estate is previewed by us before it's shown to you — no open houses, no crowds, by appointment only.</p>
+          </div>
+        </div>
+        <div class="svc-row fade-up">
+          <div class="svc-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+          <div>
+            <div class="svc-title">Off-Market Access</div>
+            <p class="svc-desc">A meaningful share of our inventory never reaches a public listing at all — ask, and we'll tell you what's available.</p>
+          </div>
+        </div>
+        <div class="svc-row fade-up">
+          <div class="svc-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="2.5"/></svg></div>
+          <div>
+            <div class="svc-title">Concierge Process</div>
+            <p class="svc-desc">One dedicated team manages every detail from first look to keys in hand — no handoffs, no repeated explanations.</p>
+          </div>
+        </div>
+        <div class="svc-row fade-up">
+          <div class="svc-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></div>
+          <div>
+            <div class="svc-title">Discreet Representation</div>
+            <p class="svc-desc">Two decades of relationships with sellers, architects, and estate attorneys across every market we serve.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="listings">
     <div class="container">
-      <div class="listings-grid">
-        <div class="estate-card fade-up">
-          <img src="meridian-estate-2.jpg" alt="The Solmar Residence oceanfront exterior" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Villa</span><div class="estate-name">The Solmar Residence</div><div class="estate-loc">Coastal Ridge</div></div>
+      <div class="listings-rows">
+        <div class="listing-row fade-up">
+          <div class="listing-media"><img src="meridian-estate-2.jpg" alt="The Solmar Residence oceanfront exterior" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Villa</span>
+            <h3 class="listing-name">The Solmar Residence</h3>
+            <div class="listing-loc">Coastal Ridge</div>
+            <p class="listing-desc">Floor-to-ceiling glass meets an infinity edge that dissolves into the horizon — waking up here means waking up on the water.</p>
+          </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="meridian-estate-5.jpg" alt="Villa Aurelia mountain cliffside exterior" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Estate</span><div class="estate-name">Villa Aurelia</div><div class="estate-loc">Highland Point</div></div>
+        <div class="listing-row reverse fade-up">
+          <div class="listing-media"><img src="meridian-estate-5.jpg" alt="Villa Aurelia mountain cliffside exterior" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Estate</span>
+            <h3 class="listing-name">Villa Aurelia</h3>
+            <div class="listing-loc">Highland Point</div>
+            <p class="listing-desc">Cliffside modern architecture wrapped in glass, with mountain views that stretch to the ridgeline from every principal room.</p>
+          </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="meridian-estate-1.jpg" alt="The Meridian House exterior" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Residence</span><div class="estate-name">The Meridian House</div><div class="estate-loc">Lakeside Bluff</div></div>
+        <div class="listing-row fade-up">
+          <div class="listing-media"><img src="meridian-estate-1.jpg" alt="The Meridian House exterior" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Residence</span>
+            <h3 class="listing-name">The Meridian House</h3>
+            <div class="listing-loc">Lakeside Bluff</div>
+            <p class="listing-desc">Cantilevered over the water's edge, where every room frames the lake without a single obstruction.</p>
+          </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="meridian-estate-3.jpg" alt="Halcyon Villa Tuscan vineyard exterior" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Villa</span><div class="estate-name">Halcyon Villa</div><div class="estate-loc">Vineyard Hills</div></div>
+        <div class="listing-row reverse fade-up">
+          <div class="listing-media"><img src="meridian-estate-3.jpg" alt="Halcyon Villa Tuscan vineyard exterior" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Villa</span>
+            <h3 class="listing-name">Halcyon Villa</h3>
+            <div class="listing-loc">Vineyard Hills</div>
+            <p class="listing-desc">A restored Tuscan estate wrapped in cypress and vine rows, built for slow mornings and long dinners outside.</p>
+          </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="meridian-estate-4.jpg" alt="The Ember House desert modern exterior" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Estate</span><div class="estate-name">The Ember House</div><div class="estate-loc">Desert Canyon</div></div>
+        <div class="listing-row fade-up">
+          <div class="listing-media"><img src="meridian-estate-4.jpg" alt="The Ember House desert modern exterior" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Estate</span>
+            <h3 class="listing-name">The Ember House</h3>
+            <div class="listing-loc">Desert Canyon</div>
+            <p class="listing-desc">Concrete, glass, and cactus silhouettes against a canyon sunset — desert modern at its most deliberate.</p>
+          </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?auto=format&fit=crop&w=1200&q=80" alt="Modern luxury villa with pool at dusk" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Residence</span><div class="estate-name">Lumen Residence</div><div class="estate-loc">Cliffside Point</div></div>
+        <div class="listing-row reverse fade-up">
+          <div class="listing-media"><img src="https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?auto=format&fit=crop&w=1200&q=80" alt="Lumen Residence modern luxury villa with pool at dusk" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Residence</span>
+            <h3 class="listing-name">Lumen Residence</h3>
+            <div class="listing-loc">Cliffside Point</div>
+            <p class="listing-desc">A glass-walled perch above the coastline, engineered so the view never competes with the architecture.</p>
+          </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=1200&q=80" alt="The Monolith Estate exterior" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Estate</span><div class="estate-name">The Monolith Estate</div><div class="estate-loc">Ridgeview Heights</div></div>
+        <div class="listing-row fade-up">
+          <div class="listing-media"><img src="https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=1200&q=80" alt="The Monolith Estate exterior" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Estate</span>
+            <h3 class="listing-name">The Monolith Estate</h3>
+            <div class="listing-loc">Ridgeview Heights</div>
+            <p class="listing-desc">Sculptural concrete and steel set against open sky — a study in scale, shadow, and quiet.</p>
+          </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1566908829550-e6551b00979b?auto=format&fit=crop&w=1200&q=80" alt="Sereno Manor exterior" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Manor</span><div class="estate-name">Sereno Manor</div><div class="estate-loc">Forest Hollow</div></div>
+        <div class="listing-row reverse fade-up">
+          <div class="listing-media"><img src="https://images.unsplash.com/photo-1566908829550-e6551b00979b?auto=format&fit=crop&w=1200&q=80" alt="Sereno Manor exterior" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Manor</span>
+            <h3 class="listing-name">Sereno Manor</h3>
+            <div class="listing-loc">Forest Hollow</div>
+            <p class="listing-desc">A storybook manor tucked into old-growth forest, where stone chimneys and leaded windows meet total modern comfort.</p>
+          </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1583765748076-cac46b8c98c1?auto=format&fit=crop&w=1200&q=80" alt="The Ivory House exterior" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Residence</span><div class="estate-name">The Ivory House</div><div class="estate-loc">Meadowbrook</div></div>
+        <div class="listing-row fade-up">
+          <div class="listing-media"><img src="https://images.unsplash.com/photo-1583765748076-cac46b8c98c1?auto=format&fit=crop&w=1200&q=80" alt="The Ivory House exterior" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Residence</span>
+            <h3 class="listing-name">The Ivory House</h3>
+            <div class="listing-loc">Meadowbrook</div>
+            <p class="listing-desc">Crisp white volumes and oversized windows framing rolling meadowland in every direction.</p>
+          </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1635111057505-3b7dcc2b72fb?auto=format&fit=crop&w=1200&q=80" alt="Whispering Pines Estate aerial exterior" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Estate</span><div class="estate-name">Whispering Pines Estate</div><div class="estate-loc">North Woods</div></div>
+        <div class="listing-row reverse fade-up">
+          <div class="listing-media"><img src="https://images.unsplash.com/photo-1635111057505-3b7dcc2b72fb?auto=format&fit=crop&w=1200&q=80" alt="Whispering Pines Estate aerial exterior" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Estate</span>
+            <h3 class="listing-name">Whispering Pines Estate</h3>
+            <div class="listing-loc">North Woods</div>
+            <p class="listing-desc">Perched above a private pine forest, with a wraparound deck built for watching the seasons change.</p>
+          </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1756064173162-326c8e85215d?auto=format&fit=crop&w=1200&q=80" alt="Bellevue Manor exterior" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Manor</span><div class="estate-name">Bellevue Manor</div><div class="estate-loc">Garden District</div></div>
+        <div class="listing-row fade-up">
+          <div class="listing-media"><img src="https://images.unsplash.com/photo-1756064173162-326c8e85215d?auto=format&fit=crop&w=1200&q=80" alt="Bellevue Manor exterior" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Manor</span>
+            <h3 class="listing-name">Bellevue Manor</h3>
+            <div class="listing-loc">Garden District</div>
+            <p class="listing-desc">Historic charm fully restored — manicured gardens, wraparound porches, and a footprint built for entertaining.</p>
+          </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1784916986940-ad230ba858f0?auto=format&fit=crop&w=1200&q=80" alt="The Ashford Estate exterior" loading="lazy">
-          <div class="estate-overlay"><span class="estate-tag">Estate</span><div class="estate-name">The Ashford Estate</div><div class="estate-loc">Heritage Row</div></div>
+        <div class="listing-row reverse fade-up">
+          <div class="listing-media"><img src="https://images.unsplash.com/photo-1784916986940-ad230ba858f0?auto=format&fit=crop&w=1200&q=80" alt="The Ashford Estate exterior" loading="lazy"></div>
+          <div class="listing-copy">
+            <span class="estate-tag">Estate</span>
+            <h3 class="listing-name">The Ashford Estate</h3>
+            <div class="listing-loc">Heritage Row</div>
+            <p class="listing-desc">A landmark address reimagined inside, blending original architectural detail with a fully modern interior.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -246,6 +402,27 @@
     const mobileMenu = document.getElementById('mobileMenu');
     hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
     document.querySelectorAll('.nav-mobile a').forEach(l => l.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+    // COUNT-UP — stat numbers animate from 0 to their target once visible
+    const countEls = document.querySelectorAll('.count-up');
+    const countObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        countObserver.unobserve(e.target);
+        const el = e.target;
+        const target = parseInt(el.dataset.target, 10);
+        const duration = 1800;
+        const start = performance.now();
+        function tick(now) {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(eased * target);
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.5 });
+    countEls.forEach(el => countObserver.observe(el));
 
     const fadeObserver = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); fadeObserver.unobserve(e.target); } });
