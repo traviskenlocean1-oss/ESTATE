@@ -761,24 +761,34 @@
     // Solutions site: plain image requests avoid the HTTP Range-request seek problem that
     // breaks <video> scroll-scrubbing on Cloudflare Workers asset hosting.
     // Frames are 1440px-class (upscaled from the original 832px Kling
-    // output for sharpness). Requesting all 315 at once on page load - what
-    // this used to do - saturated the connection and left whatever frame
-    // you scrolled to mid-download, showing as stutter. A first fix
-    // throttled background loading but still fired an unbounded number of
-    // "priority" requests as the target frame changed every scroll tick -
-    // during a fast scroll that's dozens of large concurrent downloads all
-    // competing with each other, none finishing in time, which is exactly
-    // the "gets stuck near the end, have to scroll back and forth" report.
-    // This version caps how many frame requests can be in flight at once
-    // and lets a priority request jump the queue instead of adding to the
-    // pile, so bandwidth stays focused on frames that are actually useful.
-    const HERO_FRAME_COUNT = 315;
+    // output for sharpness), decimated to every other original frame (158
+    // instead of 315) - half the network+decode work for a scroll speed
+    // the easing loop already smooths over, so the extra in-between frames
+    // weren't buying much. Requesting everything at once on page load used
+    // to saturate the connection; an unbounded "priority" loader later
+    // fired unlimited concurrent requests as the target frame changed every
+    // scroll tick. Both are gone - this caps in-flight requests and lets
+    // priority jump the queue instead of piling on.
+    const HERO_FRAME_COUNT = 158;
     const heroFramePath = i => `hero-frames/frame-${String(i).padStart(3, '0')}.jpg`;
     const heroFrames = new Array(HERO_FRAME_COUNT + 1);
     const heroFrameState = new Array(HERO_FRAME_COUNT + 1).fill(0); // 0 none, 1 queued, 2 loading/done
     const heroLoadQueue = [];
     let heroActiveLoads = 0;
     const HERO_MAX_CONCURRENT = 4;
+    // Measured this directly: scrolling through the hero a second time (same
+    // images, already downloaded) held a rock-solid 60fps, while the first
+    // pass had a single frame that stalled the main thread for 1.3 SECONDS.
+    // That gap is too big to be network - it's JPEG decode. A plain <img>
+    // that's never attached to the DOM still gets decoded, but the browser
+    // does it lazily and synchronously on whatever call first needs the
+    // pixels - here, that's the canvas drawImage() during a scroll tick.
+    // With many large frames finishing download in a cluster, their decodes
+    // pile up into exactly that kind of stall. img.decode() forces decoding
+    // to happen up front, off the main thread, as soon as bytes arrive -
+    // and by not freeing the concurrency slot until decode finishes too, it
+    // naturally spaces decode work out over time instead of dumping it all
+    // into one animation frame.
     function pumpHeroQueue() {
       while (heroActiveLoads < HERO_MAX_CONCURRENT && heroLoadQueue.length) {
         const i = heroLoadQueue.shift();
@@ -786,7 +796,7 @@
         heroActiveLoads++;
         const img = new Image();
         const done = () => { heroActiveLoads--; if (i === 1) drawHeroFrame(1); pumpHeroQueue(); };
-        img.onload = done;
+        img.onload = () => (img.decode ? img.decode().catch(() => {}) : Promise.resolve()).then(done);
         img.onerror = done;
         img.src = heroFramePath(i);
         heroFrames[i] = img;
