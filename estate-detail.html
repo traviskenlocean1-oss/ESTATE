@@ -4,6 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Meridian Estates — private property details, gallery, and inquiry.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Estate Details | Meridian Estates" id="ogTitle">
+<meta property="og:description" content="Private property details, gallery, and inquiry." id="ogDesc">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meridian-estates.traviskenlocean1.workers.dev/estate-detail" id="ogUrl">
+<meta property="og:image" content="https://meridian-estates.traviskenlocean1.workers.dev/og-image.jpg" id="ogImage">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Estate Details | Meridian Estates" id="twTitle">
+<meta name="twitter:description" content="Private property details, gallery, and inquiry." id="twDesc">
+<meta name="twitter:image" content="https://meridian-estates.traviskenlocean1.workers.dev/og-image.jpg" id="twImage">
 <title id="pageTitle">Estate Details | Meridian Estates</title>
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 <link rel="apple-touch-icon" href="logo.svg">
@@ -359,6 +371,19 @@
     const agent = AGENTS[estate.agent];
 
     document.getElementById('pageTitle').textContent = estate.name + ' | Meridian Estates';
+    // Static fallback tags above cover crawlers that don't run JS; this
+    // updates them to the actual property for anyone (or any crawler) that
+    // does, so a shared link previews the right listing instead of the
+    // generic brand description.
+    const ogTitleText = `${estate.name} | Meridian Estates`;
+    const ogDescText = estate.description.length > 155 ? estate.description.slice(0, 152) + '...' : estate.description;
+    document.getElementById('ogTitle').setAttribute('content', ogTitleText);
+    document.getElementById('ogDesc').setAttribute('content', ogDescText);
+    document.getElementById('ogUrl').setAttribute('content', `https://meridian-estates.traviskenlocean1.workers.dev/estate-detail?id=${id}`);
+    document.getElementById('ogImage').setAttribute('content', new URL(estate.gallery[0], window.location.href).href);
+    document.getElementById('twTitle').setAttribute('content', ogTitleText);
+    document.getElementById('twDesc').setAttribute('content', ogDescText);
+    document.getElementById('twImage').setAttribute('content', new URL(estate.gallery[0], window.location.href).href);
     document.getElementById('dTag').textContent = estate.tag;
     document.getElementById('dName').textContent = estate.name;
     document.getElementById('dLoc').textContent = estate.location;
