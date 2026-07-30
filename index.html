@@ -52,6 +52,18 @@
   .section-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(36px, 4.5vw, 58px); font-weight: 600; line-height: 1.05; color: var(--black); letter-spacing: -.01em; }
   .section-sub { font-size: 17px; color: var(--gray); max-width: 560px; margin-top: 16px; line-height: 1.7; }
 
+  /* fade-up on scroll, shared utility - slow and calm on purpose */
+  .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(.16,.85,.3,1), transform 1.1s cubic-bezier(.16,.85,.3,1); }
+  .fade-up.in-view { opacity: 1; transform: translateY(0); }
+
+  /* ─── STATS STRIP ─── */
+  #stats { padding: 90px 0; background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
+  .stat-num { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(32px, 4vw, 52px); font-weight: 700; color: var(--black); letter-spacing: -.01em; }
+  .stat-num .orange { color: var(--orange); }
+  .stat-label { font-size: 12.5px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); margin-top: 10px; }
+  @media (max-width: 700px) { .stats-grid { grid-template-columns: 1fr 1fr; row-gap: 44px; } }
+
   .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--orange); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .5px; padding: 17px 34px; border: none; cursor: pointer; transition: background .2s, transform .15s; text-transform: uppercase; }
   .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
   .btn-outline { display: inline-flex; align-items: center; gap: 10px; background: transparent; color: #fff; font-weight: 600; font-size: 14px; letter-spacing: .5px; padding: 15px 32px; border: 1.5px solid rgba(255,255,255,.5); cursor: pointer; transition: background .2s, border-color .2s; text-transform: uppercase; }
@@ -76,9 +88,11 @@
   body.hero-revealed .nav-logo .logo-white { display: none; }
   body.hero-revealed .nav-logo .logo-black { display: block; }
   .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
-  .nav-links a:not(.btn-primary) { font-size: 13px; font-weight: 600; letter-spacing: .4px; color: #fff; text-transform: uppercase; transition: color .5s ease, text-shadow .5s ease; text-shadow: 0 1px 8px rgba(0,0,0,.4); }
+  .nav-links a:not(.btn-primary) { position: relative; font-size: 13px; font-weight: 600; letter-spacing: .4px; color: #fff; text-transform: uppercase; transition: color .5s ease, text-shadow .5s ease; text-shadow: 0 1px 8px rgba(0,0,0,.4); padding-bottom: 4px; }
   body.hero-revealed .nav-links a:not(.btn-primary) { color: var(--black); text-shadow: none; }
+  .nav-links a:not(.btn-primary)::after { content: ''; position: absolute; left: 0; right: 100%; bottom: 0; height: 1.5px; background: var(--orange); transition: right .3s cubic-bezier(.16,.85,.3,1); }
   .nav-links a:not(.btn-primary):hover { color: var(--orange); }
+  .nav-links a:not(.btn-primary):hover::after { right: 0; }
   .nav-links .btn-primary { padding: 12px 26px; font-size: 12px; }
   .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
   .nav-hamburger span { display: block; width: 22px; height: 2px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.4); transition: background-color .5s ease; }
@@ -90,6 +104,15 @@
   /* ─── SCROLL-SCRUB FRAME-SEQUENCE HERO ─── */
   .scrub-wrap { position: relative; height: 700vh; }
   .scrub-pin { position: sticky; top: 0; height: 100vh; min-height: 620px; width: 100%; overflow: hidden; background: #0a0a0a; }
+  /* Fills the space around the sharp (capped-scale) canvas frame on wide
+     screens with a soft blurred extension of the same frame instead of
+     empty black bars - same trick Spotify/YouTube use for mismatched
+     aspect ratios. Sits behind the canvas; shows through wherever the
+     canvas is transparent. */
+  .scrub-bg-blur {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    transform: scale(1.15); filter: blur(60px) brightness(.55) saturate(1.2);
+  }
   .scrub-canvas {
     position: absolute; inset: 0; width: 100%; height: 100%;
     filter: contrast(1.12) saturate(1.12) brightness(1.02);
@@ -155,9 +178,10 @@
   #estates { padding: 130px 0; background: var(--white); }
   .estates-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 56px; flex-wrap: wrap; gap: 24px; }
   .estates-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
-  .estate-card { position: relative; overflow: hidden; aspect-ratio: 4/3; background: #eee; }
-  .estate-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
-  .estate-card:hover img { transform: scale(1.04); }
+  .estate-card { position: relative; overflow: hidden; aspect-ratio: 4/3; background: #eee; transition: transform .5s cubic-bezier(.16,.85,.3,1), box-shadow .5s cubic-bezier(.16,.85,.3,1); }
+  .estate-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(0,0,0,.22); }
+  .estate-card img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(var(--img-scale, 1.12)) translateY(var(--parallax-y, 0px)); transition: transform .6s ease; }
+  .estate-card:hover img { --img-scale: 1.16; }
   .estate-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 55%, rgba(0,0,0,.78)); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px 34px; }
   .estate-tag { display: inline-block; background: var(--orange); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; padding: 5px 12px; margin-bottom: 12px; width: fit-content; }
   .estate-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 600; color: #fff; }
@@ -320,6 +344,7 @@
   <section id="hero">
     <div class="scrub-wrap" id="scrub-wrap">
       <div class="scrub-pin" id="scrub-pin">
+        <img class="scrub-bg-blur" id="scrub-bg-blur" alt="" aria-hidden="true">
         <canvas class="scrub-canvas" id="scrub-canvas"></canvas>
         <div class="scrub-overlay"></div>
         <div class="hero-giant-logo" id="heroGiantLogo"><img src="logo-white.svg" alt="Meridian Estates"></div>
@@ -349,7 +374,7 @@
   <!-- OUR ESTATES -->
   <section id="estates">
     <div class="container">
-      <div class="estates-header">
+      <div class="estates-header fade-up">
         <div>
           <span class="eyebrow">Curated Listings</span>
           <h2 class="section-title">OUR ESTATES</h2>
@@ -357,7 +382,7 @@
         <p class="section-sub">Six hand-selected properties. Each one previewed here before it ever reaches a showing.</p>
       </div>
       <div class="estates-grid">
-        <div class="estate-card">
+        <div class="estate-card fade-up">
           <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80" alt="Modern luxury estate exterior" loading="lazy">
           <div class="estate-overlay">
             <span class="estate-tag">Villa</span>
@@ -365,7 +390,7 @@
             <div class="estate-loc">Coastal Ridge</div>
           </div>
         </div>
-        <div class="estate-card">
+        <div class="estate-card fade-up">
           <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80" alt="Modern luxury villa exterior" loading="lazy">
           <div class="estate-overlay">
             <span class="estate-tag">Estate</span>
@@ -373,7 +398,7 @@
             <div class="estate-loc">Highland Point</div>
           </div>
         </div>
-        <div class="estate-card">
+        <div class="estate-card fade-up">
           <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80" alt="Contemporary luxury home exterior" loading="lazy">
           <div class="estate-overlay">
             <span class="estate-tag">Residence</span>
@@ -381,7 +406,7 @@
             <div class="estate-loc">Lakeside Bluff</div>
           </div>
         </div>
-        <div class="estate-card">
+        <div class="estate-card fade-up">
           <img src="https://images.unsplash.com/photo-1706808849780-7a04fbac83ef?auto=format&fit=crop&w=1200&q=80" alt="Modern estate exterior with pool" loading="lazy">
           <div class="estate-overlay">
             <span class="estate-tag">Villa</span>
@@ -389,7 +414,7 @@
             <div class="estate-loc">Vineyard Hills</div>
           </div>
         </div>
-        <div class="estate-card">
+        <div class="estate-card fade-up">
           <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80" alt="Luxury modern house exterior" loading="lazy">
           <div class="estate-overlay">
             <span class="estate-tag">Estate</span>
@@ -397,7 +422,7 @@
             <div class="estate-loc">Desert Canyon</div>
           </div>
         </div>
-        <div class="estate-card">
+        <div class="estate-card fade-up">
           <img src="https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?auto=format&fit=crop&w=1200&q=80" alt="Modern luxury villa with pool at dusk" loading="lazy">
           <div class="estate-overlay">
             <span class="estate-tag">Residence</span>
@@ -409,10 +434,34 @@
     </div>
   </section>
 
+  <!-- STATS -->
+  <section id="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="fade-up">
+          <div class="stat-num"><span class="orange">$</span><span class="count-up" data-target="500">0</span><span class="orange">M+</span></div>
+          <div class="stat-label">In Sales</div>
+        </div>
+        <div class="fade-up">
+          <div class="stat-num"><span class="count-up" data-target="150">0</span><span class="orange">+</span></div>
+          <div class="stat-label">Estates Sold</div>
+        </div>
+        <div class="fade-up">
+          <div class="stat-num"><span class="count-up" data-target="20">0</span><span class="orange">+</span></div>
+          <div class="stat-label">Years Combined Experience</div>
+        </div>
+        <div class="fade-up">
+          <div class="stat-num"><span class="count-up" data-target="98">0</span><span class="orange">%</span></div>
+          <div class="stat-label">Client Satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- VILLA FEATURES -->
   <section id="villa-features">
     <div class="container">
-      <div class="vf-header">
+      <div class="vf-header fade-up">
         <span class="eyebrow">A Closer Look</span>
         <h2 class="section-title">VILLA FEATURES</h2>
         <p class="section-sub">A closer look at what makes each estate feel effortless — space, privacy, and design throughout.</p>
@@ -516,7 +565,7 @@
   <!-- FAQ -->
   <section id="faq">
     <div class="container">
-      <div class="faq-header">
+      <div class="faq-header fade-up">
         <span class="eyebrow">Common Questions</span>
         <h2 class="section-title">FREQUENTLY ASKED</h2>
         <p class="section-sub">Everything people usually ask before their first showing.</p>
@@ -635,6 +684,7 @@
     }
 
     const scrubCanvas  = document.getElementById('scrub-canvas');
+    const scrubBgBlur  = document.getElementById('scrub-bg-blur');
     const scrubCtx     = scrubCanvas.getContext('2d');
     scrubCtx.imageSmoothingEnabled = true;
     scrubCtx.imageSmoothingQuality = 'high';
@@ -677,15 +727,16 @@
       const img = heroFrames[idx];
       if (!img || !img.complete || !img.naturalWidth || idx === lastDrawnFrame) return;
       lastDrawnFrame = idx;
+      scrubBgBlur.src = img.src;
       const cw = scrubCanvas.width, ch = scrubCanvas.height;
       const iw = img.naturalWidth, ih = img.naturalHeight;
       // The source footage is portrait (832x1104) but the hero is a wide
       // landscape container, so true "cover" fit would need to upscale by
       // 2.3x+ on a typical desktop screen to reach full width - that's the
       // actual cause of the blur while scrolling, not JPEG quality or fps.
-      // Capping the scale keeps every frame sharp; on wide screens the
-      // footage pillarboxes (blends into the canvas's own black background)
-      // instead of being stretched past its real resolution.
+      // Capping the scale keeps the visible frame sharp; the space around
+      // it (on wide screens) shows the blurred backdrop img instead of
+      // stretching the real footage past its native resolution.
       const scale = Math.min(Math.max(cw / iw, ch / ih), 1.35);
       const dw = iw * scale, dh = ih * scale;
       scrubCtx.clearRect(0, 0, cw, ch);
@@ -795,6 +846,57 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); rowObserver.unobserve(e.target); } });
     }, { threshold: 0.3 });
     processRows.forEach((el, i) => { el.style.transitionDelay = (i * 0.1) + 's'; rowObserver.observe(el); });
+
+    // PARALLAX — estate card photos drift slightly slower than the scroll
+    // itself (classic subtle parallax), oversized via --img-scale so the
+    // drift never reveals an edge.
+    const parallaxImgs = Array.from(document.querySelectorAll('.estate-card img'));
+    function parallaxTick() {
+      const vh = window.innerHeight;
+      parallaxImgs.forEach(img => {
+        const rect = img.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+        const offset = (center - vh / 2) / vh; // -0.5 .. 0.5 roughly
+        img.style.setProperty('--parallax-y', (offset * 26) + 'px');
+      });
+    }
+    window.addEventListener('scroll', () => requestAnimationFrame(parallaxTick), { passive: true });
+    parallaxTick();
+
+    // FADE-UP — shared, slow and calm on purpose. Estate cards get a slight
+    // stagger so the grid feels handcrafted rather than all snapping in at once.
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const fadeObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); fadeObserver.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    fadeEls.forEach(el => fadeObserver.observe(el));
+    document.querySelectorAll('.estates-grid .estate-card').forEach((el, i) => {
+      el.style.transitionDelay = (i % 3) * 0.12 + 's';
+    });
+    document.querySelectorAll('#stats .fade-up').forEach((el, i) => {
+      el.style.transitionDelay = i * 0.1 + 's';
+    });
+
+    // COUNT-UP — stat numbers animate from 0 to their target once visible
+    const countEls = document.querySelectorAll('.count-up');
+    const countObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        countObserver.unobserve(e.target);
+        const el = e.target;
+        const target = parseInt(el.dataset.target, 10);
+        const duration = 1800;
+        const start = performance.now();
+        function tick(now) {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(eased * target);
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.5 });
+    countEls.forEach(el => countObserver.observe(el));
 
     // FAQ — accordion, one open at a time
     const faqItems = document.querySelectorAll('#faqList .faq-item');
