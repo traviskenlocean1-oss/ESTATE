@@ -64,6 +64,18 @@
   .stat-label { font-size: 12.5px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); margin-top: 10px; }
   @media (max-width: 700px) { .stats-grid { grid-template-columns: 1fr 1fr; row-gap: 44px; } }
 
+  /* ─── TESTIMONIALS ─── */
+  #testimonials { padding: 120px 0; background: var(--white); }
+  .testimonials-header { text-align: center; max-width: 640px; margin: 0 auto 56px; }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .testimonial-card { border: 1px solid var(--border); padding: 32px 26px; }
+  .testimonial-quote { color: var(--orange); opacity: .35; margin-bottom: 16px; }
+  .testimonial-text { font-size: 14.5px; color: var(--black); line-height: 1.7; min-height: 96px; }
+  .testimonial-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 15px; font-weight: 600; margin-top: 22px; }
+  .testimonial-loc { font-size: 12.5px; color: var(--gray); margin-top: 3px; }
+  @media (max-width: 1000px) { .testimonials-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .testimonials-grid { grid-template-columns: 1fr; } .testimonial-text { min-height: 0; } }
+
   .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--orange); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .5px; padding: 17px 34px; border: none; cursor: pointer; transition: background .2s, transform .15s; text-transform: uppercase; }
   .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
   .btn-outline { display: inline-flex; align-items: center; gap: 10px; background: transparent; color: #fff; font-weight: 600; font-size: 14px; letter-spacing: .5px; padding: 15px 32px; border: 1.5px solid rgba(255,255,255,.5); cursor: pointer; transition: background .2s, border-color .2s; text-transform: uppercase; }
@@ -194,6 +206,8 @@
   .estates-slide-info .estate-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 600; color: #fff; }
   .estates-slide-info .estate-loc { font-size: 13px; color: rgba(255,255,255,.65); margin-top: 4px; }
   .estates-slide-info .estate-desc { font-size: 14px; color: rgba(255,255,255,.75); margin-top: 14px; line-height: 1.6; }
+  .estates-slide-link { display: inline-block; margin-top: 16px; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--orange); transition: transform .2s ease; }
+  .estates-slide-link:hover { transform: translateX(4px); }
   .estates-tour-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--orange); transform: scaleX(0); transform-origin: left; transition: transform .04s linear; z-index: 4; }
   .estates-tour-viewall { position: absolute; right: 40px; bottom: 32px; z-index: 4; font-size: 12px; font-weight: 700; letter-spacing: .5px; color: #fff; text-transform: uppercase; opacity: .75; transition: opacity .2s ease; }
   .estates-tour-viewall:hover { opacity: 1; color: var(--orange); }
@@ -345,6 +359,7 @@
       </a>
       <ul class="nav-links">
         <li><a href="estates.html">Estates</a></li>
+        <li><a href="agents.html">Agents</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="#process">Process</a></li>
         <li><a href="contact.html" class="btn-primary">Contact</a></li>
@@ -353,6 +368,7 @@
     </div>
     <div class="nav-mobile" id="mobileMenu">
       <a href="estates.html">Estates</a>
+      <a href="agents.html">Agents</a>
       <a href="services.html">Services</a>
       <a href="#process">Process</a>
       <a href="contact.html">Contact</a>
@@ -413,6 +429,7 @@
                 <div class="estate-name">The Solmar Residence</div>
                 <div class="estate-loc">Coastal Ridge</div>
                 <p class="estate-desc">Floor-to-ceiling glass meets an infinity edge that dissolves into the horizon — waking up here means waking up on the water.</p>
+                <a class="estates-slide-link" href="estate-detail.html?id=solmar-residence">View Details &rarr;</a>
               </div>
             </div>
             <div class="estates-slide">
@@ -422,6 +439,7 @@
                 <div class="estate-name">The Meridian House</div>
                 <div class="estate-loc">Lakeside Bluff</div>
                 <p class="estate-desc">Cantilevered over the water's edge, where every room frames the lake without a single obstruction.</p>
+                <a class="estates-slide-link" href="estate-detail.html?id=meridian-house">View Details &rarr;</a>
               </div>
             </div>
             <div class="estates-slide">
@@ -431,6 +449,7 @@
                 <div class="estate-name">Halcyon Villa</div>
                 <div class="estate-loc">Vineyard Hills</div>
                 <p class="estate-desc">A restored Tuscan estate wrapped in cypress and vine rows, built for slow mornings and long dinners outside.</p>
+                <a class="estates-slide-link" href="estate-detail.html?id=halcyon-villa">View Details &rarr;</a>
               </div>
             </div>
             <div class="estates-slide">
@@ -440,6 +459,7 @@
                 <div class="estate-name">The Ember House</div>
                 <div class="estate-loc">Desert Canyon</div>
                 <p class="estate-desc">Concrete, glass, and cactus silhouettes against a canyon sunset — desert modern at its most deliberate.</p>
+                <a class="estates-slide-link" href="estate-detail.html?id=ember-house">View Details &rarr;</a>
               </div>
             </div>
             <div class="estates-slide">
@@ -449,6 +469,7 @@
                 <div class="estate-name">Lumen Residence</div>
                 <div class="estate-loc">Cliffside Point</div>
                 <p class="estate-desc">A glass-walled perch above the coastline, engineered so the view never competes with the architecture.</p>
+                <a class="estates-slide-link" href="estate-detail.html?id=lumen-residence">View Details &rarr;</a>
               </div>
             </div>
           </div>
@@ -478,6 +499,42 @@
         <div class="fade-up">
           <div class="stat-num"><span class="count-up" data-target="98">0</span><span class="orange">%</span></div>
           <div class="stat-label">Client Satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="container">
+      <div class="testimonials-header fade-up">
+        <span class="eyebrow">Client Stories</span>
+        <h2 class="section-title">WHAT OUR CLIENTS SAY</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card fade-up">
+          <svg class="testimonial-quote" width="30" height="24" viewBox="0 0 30 24" fill="currentColor"><path d="M0 24V13.8C0 6.2 4.6 1 12.4 0l1.4 4.2C9.4 5.4 7 8 7 11.4h6.4V24H0zm16.2 0V13.8C16.2 6.2 20.8 1 28.6 0L30 4.2c-4.4 1.2-6.8 3.8-6.8 7.2h6.4V24H16.2z"/></svg>
+          <p class="testimonial-text">"They found us a property before it ever hit the market. No open houses, no bidding war — just the right house, once."</p>
+          <div class="testimonial-name">Whitfield Family</div>
+          <div class="testimonial-loc">Purchased in Vineyard Hills</div>
+        </div>
+        <div class="testimonial-card fade-up">
+          <svg class="testimonial-quote" width="30" height="24" viewBox="0 0 30 24" fill="currentColor"><path d="M0 24V13.8C0 6.2 4.6 1 12.4 0l1.4 4.2C9.4 5.4 7 8 7 11.4h6.4V24H0zm16.2 0V13.8C16.2 6.2 20.8 1 28.6 0L30 4.2c-4.4 1.2-6.8 3.8-6.8 7.2h6.4V24H16.2z"/></svg>
+          <p class="testimonial-text">"Selling a home this size usually means months of showings. Meridian previewed serious buyers privately and we closed in five weeks."</p>
+          <div class="testimonial-name">R. Delacroix</div>
+          <div class="testimonial-loc">Sold in Coastal Ridge</div>
+        </div>
+        <div class="testimonial-card fade-up">
+          <svg class="testimonial-quote" width="30" height="24" viewBox="0 0 30 24" fill="currentColor"><path d="M0 24V13.8C0 6.2 4.6 1 12.4 0l1.4 4.2C9.4 5.4 7 8 7 11.4h6.4V24H0zm16.2 0V13.8C16.2 6.2 20.8 1 28.6 0L30 4.2c-4.4 1.2-6.8 3.8-6.8 7.2h6.4V24H16.2z"/></svg>
+          <p class="testimonial-text">"We relocated across the country mid-renovation on our old house. Our agent handled everything here before we'd even landed."</p>
+          <div class="testimonial-name">Priya &amp; Tom Nakamura</div>
+          <div class="testimonial-loc">Relocated to Lakeside Bluff</div>
+        </div>
+        <div class="testimonial-card fade-up">
+          <svg class="testimonial-quote" width="30" height="24" viewBox="0 0 30 24" fill="currentColor"><path d="M0 24V13.8C0 6.2 4.6 1 12.4 0l1.4 4.2C9.4 5.4 7 8 7 11.4h6.4V24H0zm16.2 0V13.8C16.2 6.2 20.8 1 28.6 0L30 4.2c-4.4 1.2-6.8 3.8-6.8 7.2h6.4V24H16.2z"/></svg>
+          <p class="testimonial-text">"Two purchases and a sale over eight years, same firm every time. That kind of continuity is worth more than a lower commission."</p>
+          <div class="testimonial-name">J. Halloway</div>
+          <div class="testimonial-loc">Repeat Client Since 2018</div>
         </div>
       </div>
     </div>
@@ -652,6 +709,7 @@
           <div class="footer-col-title">Explore</div>
           <ul class="footer-links">
             <li><a href="estates.html">Our Estates</a></li>
+            <li><a href="agents.html">Our Agents</a></li>
             <li><a href="#villa-features">Villa Features</a></li>
             <li><a href="#process">Our Process</a></li>
             <li><a href="#faq">FAQ</a></li>
@@ -698,15 +756,35 @@
     // extracted at 12fps. Same canvas-draw + eased-frame technique used on the Willpower
     // Solutions site: plain image requests avoid the HTTP Range-request seek problem that
     // breaks <video> scroll-scrubbing on Cloudflare Workers asset hosting.
+    // Frames are now 1080p-class (upscaled from the original 832px Kling
+    // output for sharpness), which makes the full set ~40MB. Requesting all
+    // 315 at once on page load - which is what this used to do - saturates
+    // the connection and leaves whatever frame you scroll to mid-download,
+    // showing as stutter. Instead: load a small window up front so playback
+    // starts smoothly, stream the rest in the background a few at a time,
+    // and prioritize whatever frame is actually requested so scrolling
+    // ahead of the background queue self-heals immediately.
     const HERO_FRAME_COUNT = 315;
     const heroFramePath = i => `hero-frames/frame-${String(i).padStart(3, '0')}.jpg`;
-    const heroFrames = new Array(HERO_FRAME_COUNT);
-    for (let i = 1; i <= HERO_FRAME_COUNT; i++) {
+    const heroFrames = new Array(HERO_FRAME_COUNT + 1);
+    const heroFrameRequested = new Array(HERO_FRAME_COUNT + 1).fill(false);
+    function ensureHeroFrame(i) {
+      if (i < 1 || i > HERO_FRAME_COUNT || heroFrameRequested[i]) return;
+      heroFrameRequested[i] = true;
       const img = new Image();
       img.src = heroFramePath(i);
       img.onload = () => { if (i === 1) drawHeroFrame(1); };
       heroFrames[i] = img;
     }
+    for (let i = 1; i <= 24; i++) ensureHeroFrame(i);
+    let bgFrameNext = 25;
+    function backgroundLoadFrames() {
+      for (let n = 0; n < 4 && bgFrameNext <= HERO_FRAME_COUNT; n++, bgFrameNext++) ensureHeroFrame(bgFrameNext);
+      if (bgFrameNext <= HERO_FRAME_COUNT) {
+        (window.requestIdleCallback || (fn => setTimeout(fn, 150)))(backgroundLoadFrames);
+      }
+    }
+    backgroundLoadFrames();
 
     const scrubCanvas  = document.getElementById('scrub-canvas');
     const scrubCtx     = scrubCanvas.getContext('2d');
@@ -747,6 +825,11 @@
     function drawHeroFrame(n) {
       lastRequestedFrame = n;
       let idx = Math.round(n);
+      // Prioritize the frame actually being scrolled to (plus a short
+      // lookahead) over the background queue's sequential order.
+      ensureHeroFrame(idx);
+      ensureHeroFrame(idx + 1);
+      ensureHeroFrame(idx + 2);
       while (idx > 1 && !(heroFrames[idx] && heroFrames[idx].complete && heroFrames[idx].naturalWidth)) idx--;
       const img = heroFrames[idx];
       if (!img || !img.complete || !img.naturalWidth || idx === lastDrawnFrame) return;
@@ -932,6 +1015,9 @@
     fadeEls.forEach(el => fadeObserver.observe(el));
     document.querySelectorAll('#stats .fade-up').forEach((el, i) => {
       el.style.transitionDelay = i * 0.1 + 's';
+    });
+    document.querySelectorAll('.testimonial-card').forEach((el, i) => {
+      el.style.transitionDelay = (i % 4) * 0.1 + 's';
     });
 
     // COUNT-UP — stat numbers animate from 0 to their target once visible

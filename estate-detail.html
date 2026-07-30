@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Meridian Estates — private property details, gallery, and inquiry.">
+<title id="pageTitle">Estate Details | Meridian Estates</title>
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="apple-touch-icon" href="logo.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --black: #0a0a0a; --white: #fafaf8; --orange: #ff6a00;
+    --orange-dark: #d95700; --gray: #6b6866; --border: #e6e3e0; --nav-h: 84px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--white); color: var(--black); font-family: 'Hanken Grotesk', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+  .eyebrow { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--orange); margin-bottom: 14px; }
+  .section-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(30px, 3.6vw, 46px); font-weight: 600; line-height: 1.08; letter-spacing: -.01em; }
+  .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: var(--orange); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .5px; padding: 16px 28px; border: none; cursor: pointer; transition: background .2s, transform .15s; text-transform: uppercase; width: 100%; }
+  .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
+  .btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1.5px solid var(--border); color: var(--black); font-weight: 700; font-size: 12.5px; letter-spacing: .5px; padding: 12px 20px; text-transform: uppercase; transition: border-color .2s, color .2s; }
+  .btn-outline:hover { border-color: var(--orange); color: var(--orange); }
+
+  .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.16,.85,.3,1), transform 1s cubic-bezier(.16,.85,.3,1); }
+  .fade-up.in-view { opacity: 1; transform: translateY(0); }
+
+  /* ─── NAV ─── */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(250,250,248,.96); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); }
+  .nav-logo { display: flex; align-items: center; height: 108px; }
+  .nav-logo img { height: 100%; width: auto; }
+  .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+  .nav-links a:not(.btn-primary) { position: relative; font-size: 13px; font-weight: 600; letter-spacing: .4px; color: var(--black); text-transform: uppercase; transition: color .2s; padding-bottom: 4px; width: auto; }
+  .nav-links a:not(.btn-primary)::after { content: ''; position: absolute; left: 0; right: 100%; bottom: 0; height: 1.5px; background: var(--orange); transition: right .3s cubic-bezier(.16,.85,.3,1); }
+  .nav-links a:not(.btn-primary):hover { color: var(--orange); }
+  .nav-links a:not(.btn-primary):hover::after { right: 0; }
+  .nav-links .btn-primary { padding: 12px 26px; font-size: 12px; width: auto; }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--black); }
+  .nav-mobile { display: none; background: var(--white); border-top: 1px solid var(--border); padding: 20px 40px; }
+  .nav-mobile.open { display: block; }
+  .nav-mobile a { display: block; padding: 14px 0; font-size: 15px; font-weight: 600; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: .4px; }
+
+  /* ─── BREADCRUMB ─── */
+  #breadcrumb { padding: calc(var(--nav-h) + 34px) 0 0; }
+  #breadcrumb a { font-size: 12.5px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: .4px; transition: color .2s; }
+  #breadcrumb a:hover { color: var(--orange); }
+
+  /* ─── GALLERY (main image + thumbs, click-to-swap, click main for lightbox) ─── */
+  #gallery { padding: 22px 0 0; }
+  .gallery-main { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #eee; cursor: zoom-in; }
+  .gallery-main img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity .5s ease; }
+  .gallery-main img.loaded { opacity: 1; }
+  .gallery-count { position: absolute; right: 18px; bottom: 18px; background: rgba(10,10,10,.6); color: #fff; font-size: 12px; font-weight: 600; padding: 6px 12px; letter-spacing: .3px; }
+  .gallery-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 12px; }
+  .gallery-thumb { aspect-ratio: 4/3; overflow: hidden; cursor: pointer; opacity: .55; transition: opacity .25s ease, outline-color .25s ease; outline: 2px solid transparent; outline-offset: -2px; }
+  .gallery-thumb.active { opacity: 1; outline-color: var(--orange); }
+  .gallery-thumb:hover { opacity: 1; }
+  .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .lightbox { position: fixed; inset: 0; background: rgba(10,10,10,.95); z-index: 2000; display: none; align-items: center; justify-content: center; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 88vw; max-height: 82vh; object-fit: contain; }
+  .lightbox-close, .lightbox-prev, .lightbox-next { position: absolute; background: none; border: none; color: #fff; cursor: pointer; opacity: .7; transition: opacity .2s ease; padding: 10px; }
+  .lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover { opacity: 1; }
+  .lightbox-close { top: 24px; right: 28px; }
+  .lightbox-prev { left: 16px; top: 50%; transform: translateY(-50%); }
+  .lightbox-next { right: 16px; top: 50%; transform: translateY(-50%); }
+
+  /* ─── HEADER + SPEC BAR ─── */
+  #detail-header { padding: 40px 0 0; }
+  .detail-head-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+  .estate-tag { display: inline-block; background: var(--orange); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; padding: 5px 12px; width: fit-content; margin-bottom: 14px; }
+  .detail-loc { font-size: 14px; color: var(--gray); margin-top: 8px; }
+  .detail-price { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(26px, 2.6vw, 36px); font-weight: 700; color: var(--black); white-space: nowrap; }
+  .spec-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; margin-top: 40px; padding: 28px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .spec-item { text-align: center; }
+  .spec-num { font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700; color: var(--black); }
+  .spec-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--gray); margin-top: 4px; }
+
+  /* ─── LAYOUT (description/features/map left, agent card right) ─── */
+  #detail-body { padding: 56px 0 130px; }
+  .detail-layout { display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: start; }
+  .detail-desc { font-size: 15.5px; color: var(--gray); line-height: 1.8; max-width: 640px; }
+  .detail-block-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 600; margin: 46px 0 20px; }
+  .feature-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; max-width: 640px; }
+  .feature-list li { display: flex; align-items: center; gap: 10px; font-size: 14.5px; color: var(--black); }
+  .feature-list li svg { flex-shrink: 0; color: var(--orange); }
+  .map-embed { width: 100%; max-width: 640px; aspect-ratio: 16/9; border: 1px solid var(--border); }
+  .map-embed iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .map-link { display: inline-block; margin-top: 12px; font-size: 12.5px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: .4px; }
+
+  /* ─── AGENT CARD (sticky) ─── */
+  .agent-card { position: sticky; top: calc(var(--nav-h) + 24px); border: 1px solid var(--border); padding: 30px; }
+  .agent-photo { width: 100%; aspect-ratio: 1/1; overflow: hidden; margin-bottom: 18px; }
+  .agent-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .agent-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; font-weight: 600; }
+  .agent-title { font-size: 12.5px; color: var(--orange); font-weight: 700; letter-spacing: .3px; margin-top: 3px; }
+  .agent-meta { font-size: 13px; color: var(--gray); margin-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+  .agent-card .btn-primary { margin-top: 20px; }
+  .agent-card .btn-outline { margin-top: 10px; }
+
+  #inquire { padding: 20px 0 0; }
+  .inquire-card { background: var(--black); padding: 40px 36px; max-width: 640px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 8px; }
+  .form-group input, .form-group textarea {
+    width: 100%; padding: 14px 16px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14);
+    color: #fff; font-family: 'Hanken Grotesk', sans-serif; font-size: 14.5px; outline: none; transition: border-color .2s;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--orange); }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-note { font-size: 12.5px; color: rgba(255,255,255,.4); margin-top: 16px; text-align: center; }
+  .form-success { display: none; text-align: center; padding: 30px 10px; }
+  .form-success.show { display: block; }
+  .form-success h3 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+  .form-success p { font-size: 14px; color: rgba(255,255,255,.55); }
+
+  /* ─── SIMILAR ESTATES ─── */
+  #similar { padding: 20px 0 130px; background: var(--white); border-top: 1px solid var(--border); }
+  .similar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 30px; }
+  .similar-card { position: relative; overflow: hidden; aspect-ratio: 4/3; background: #eee; transition: transform .5s cubic-bezier(.16,.85,.3,1), box-shadow .5s cubic-bezier(.16,.85,.3,1); }
+  .similar-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(0,0,0,.18); }
+  .similar-card img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.1); transition: transform .6s ease; }
+  .similar-card:hover img { transform: scale(1.15); }
+  .similar-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 55%, rgba(0,0,0,.78)); display: flex; flex-direction: column; justify-content: flex-end; padding: 22px 24px; }
+  .similar-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; font-weight: 600; color: #fff; }
+  .similar-loc { font-size: 12.5px; color: rgba(255,255,255,.7); margin-top: 3px; }
+
+  /* ─── FOOTER (matches other pages) ─── */
+  footer { background: var(--black); padding: 90px 0 0; overflow: hidden; }
+  .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 60px; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .footer-logo { height: 30px; margin-bottom: 20px; }
+  .footer-desc { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.75; max-width: 280px; margin-bottom: 26px; }
+  .footer-social { display: flex; gap: 12px; }
+  .footer-social a { width: 34px; height: 34px; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.65); transition: border-color .2s, color .2s; }
+  .footer-social a:hover { border-color: var(--orange); color: var(--orange); }
+  .footer-col-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--orange); text-transform: uppercase; margin-bottom: 22px; }
+  .footer-links { display: flex; flex-direction: column; gap: 14px; list-style: none; }
+  .footer-links a { font-size: 14px; color: rgba(255,255,255,.6); transition: color .2s; width: auto; }
+  .footer-links a:hover { color: #fff; }
+  .footer-contact-line { font-size: 14px; color: rgba(255,255,255,.6); }
+  .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 26px 0; font-size: 12.5px; color: rgba(255,255,255,.4); }
+  .footer-giant { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; text-align: center; line-height: .8; color: rgba(255,106,0,.14); font-size: clamp(46px, 8.6vw, 150px); letter-spacing: -.01em; user-select: none; white-space: nowrap; padding-bottom: .04em; }
+
+  @media (max-width: 1000px) {
+    .detail-layout { grid-template-columns: 1fr; }
+    .agent-card { position: static; }
+    .spec-bar { grid-template-columns: repeat(3, 1fr); row-gap: 20px; }
+  }
+  @media (max-width: 900px) {
+    .container { padding: 0 24px; }
+    .nav-links a:not(.btn-primary), .nav-links .btn-primary { display: none; }
+    .nav-hamburger { display: flex; }
+    .footer-top { grid-template-columns: 1fr 1fr; row-gap: 44px; }
+    .similar-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-thumbs { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .spec-bar { grid-template-columns: repeat(2, 1fr); }
+    .feature-list { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .similar-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; }
+    .gallery-thumbs { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Meridian Estates">
+        <img src="logo.svg" alt="Meridian Estates">
+      </a>
+      <ul class="nav-links">
+        <li><a href="estates.html">Estates</a></li>
+        <li><a href="agents.html">Agents</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="contact.html" class="btn-primary">Contact</a></li>
+      </ul>
+      <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+    <div class="nav-mobile" id="mobileMenu">
+      <a href="estates.html">Estates</a>
+      <a href="agents.html">Agents</a>
+      <a href="services.html">Services</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <div id="breadcrumb">
+    <div class="container"><a href="estates.html">&larr; Back to All Estates</a></div>
+  </div>
+
+  <section id="gallery">
+    <div class="container">
+      <div class="gallery-main" id="galleryMain">
+        <img id="galleryMainImg" src="" alt="">
+        <div class="gallery-count" id="galleryCount"></div>
+      </div>
+      <div class="gallery-thumbs" id="galleryThumbs"></div>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close"><svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <button class="lightbox-prev" id="lightboxPrev" aria-label="Previous"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <img id="lightboxImg" src="" alt="">
+    <button class="lightbox-next" id="lightboxNext" aria-label="Next"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+  </div>
+
+  <section id="detail-header">
+    <div class="container">
+      <div class="detail-head-top fade-up">
+        <div>
+          <span class="estate-tag" id="dTag"></span>
+          <h1 class="section-title" id="dName"></h1>
+          <div class="detail-loc" id="dLoc"></div>
+        </div>
+        <div class="detail-price" id="dPrice"></div>
+      </div>
+      <div class="spec-bar fade-up">
+        <div class="spec-item"><div class="spec-num" id="dBeds"></div><div class="spec-label">Bedrooms</div></div>
+        <div class="spec-item"><div class="spec-num" id="dBaths"></div><div class="spec-label">Bathrooms</div></div>
+        <div class="spec-item"><div class="spec-num" id="dSqft"></div><div class="spec-label">Interior Sq Ft</div></div>
+        <div class="spec-item"><div class="spec-num" id="dLot"></div><div class="spec-label">Lot Size</div></div>
+        <div class="spec-item"><div class="spec-num" id="dYear"></div><div class="spec-label">Year Built</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="detail-body">
+    <div class="container">
+      <div class="detail-layout">
+        <div>
+          <p class="detail-desc fade-up" id="dDesc"></p>
+          <h2 class="detail-block-title fade-up">Features &amp; Amenities</h2>
+          <ul class="feature-list fade-up" id="dFeatures"></ul>
+          <h2 class="detail-block-title fade-up">Location</h2>
+          <div class="map-embed fade-up" id="dMap"></div>
+          <a class="map-link" id="dMapLink" href="#" target="_blank" rel="noopener">Open Larger Map &rarr;</a>
+
+          <div id="inquire">
+            <h2 class="detail-block-title fade-up">Request a Private Showing</h2>
+            <div class="inquire-card fade-up">
+              <form id="inquireForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <div class="form-row">
+                  <div class="form-group"><label for="if-name">Full Name*</label><input type="text" id="if-name" name="name" required></div>
+                  <div class="form-group"><label for="if-phone">Phone*</label><input type="tel" id="if-phone" name="phone" required></div>
+                </div>
+                <div class="form-group"><label for="if-email">Email*</label><input type="email" id="if-email" name="email" required></div>
+                <div class="form-group"><label for="if-message">Message</label><textarea id="if-message" name="message"></textarea></div>
+                <button type="submit" class="btn-primary">Request This Estate</button>
+                <p class="form-note">We typically respond within 24 hours.</p>
+              </form>
+              <div class="form-success" id="inquireSuccess">
+                <h3>Thank You</h3>
+                <p>Your request has been received — your agent will be in touch within 24 hours.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="agent-card fade-up" id="agentCard">
+          <div class="agent-photo"><img id="aPhoto" src="" alt=""></div>
+          <div class="agent-name" id="aName"></div>
+          <div class="agent-title" id="aTitle"></div>
+          <div class="agent-meta">
+            <div id="aPhone"></div>
+            <div id="aEmail"></div>
+            <div id="aLicense"></div>
+          </div>
+          <a href="#inquire" class="btn-primary">Request This Estate</a>
+          <a href="agents.html" class="btn-outline">View All Agents &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="similar">
+    <div class="container">
+      <span class="eyebrow fade-up">You May Also Like</span>
+      <h2 class="section-title fade-up">SIMILAR ESTATES</h2>
+      <div class="similar-grid" id="similarGrid"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <img src="logo-white.svg" alt="Meridian Estates" class="footer-logo">
+          <p class="footer-desc">Curated luxury real estate — private showings, hand-selected estates, and a seamless path from first look to keys in hand.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <a href="#" aria-label="Instagram"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+            <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.24 8.25h4.53V23H.24zM8.5 8.25h4.34v2.01h.06c.6-1.14 2.08-2.34 4.28-2.34 4.58 0 5.42 3.01 5.42 6.93V23h-4.53v-6.32c0-1.51-.03-3.45-2.1-3.45-2.11 0-2.43 1.65-2.43 3.35V23H8.5z"/></svg></a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Explore</div>
+          <ul class="footer-links">
+            <li><a href="estates.html">Our Estates</a></li>
+            <li><a href="agents.html">Our Agents</a></li>
+            <li><a href="index.html#process">Our Process</a></li>
+            <li><a href="index.html#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links">
+            <li><a href="services.html">About</a></li>
+            <li><a href="services.html">Careers</a></li>
+            <li><a href="services.html">Press</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Contact</div>
+          <ul class="footer-links">
+            <li class="footer-contact-line">(561) 555-0134</li>
+            <li class="footer-contact-line">info@meridianestates.com</li>
+            <li class="footer-contact-line">By Private Appointment Only</li>
+            <li class="footer-contact-line">Mon–Sat</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>&copy; 2026 Meridian Estates. All rights reserved.</div>
+        <div>Licensed Real Estate Brokerage · DRE #01234567</div>
+      </div>
+    </div>
+    <div class="footer-giant">MERIDIAN ESTATES</div>
+  </footer>
+
+  <script src="estates-data.js"></script>
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+    document.querySelectorAll('.nav-mobile a').forEach(l => l.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+    // Resolve which estate to render from ?id= in the URL, falling back to
+    // the first one in the data set so the page never renders empty.
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id') && ESTATES[params.get('id')] ? params.get('id') : Object.keys(ESTATES)[0];
+    const estate = ESTATES[id];
+    const agent = AGENTS[estate.agent];
+
+    document.getElementById('pageTitle').textContent = estate.name + ' | Meridian Estates';
+    document.getElementById('dTag').textContent = estate.tag;
+    document.getElementById('dName').textContent = estate.name;
+    document.getElementById('dLoc').textContent = estate.location;
+    document.getElementById('dPrice').textContent = estate.price;
+    document.getElementById('dBeds').textContent = estate.beds;
+    document.getElementById('dBaths').textContent = estate.baths;
+    document.getElementById('dSqft').textContent = estate.sqft;
+    document.getElementById('dLot').textContent = estate.lot;
+    document.getElementById('dYear').textContent = estate.year;
+    document.getElementById('dDesc').textContent = estate.description;
+
+    document.getElementById('dFeatures').innerHTML = estate.features.map(f =>
+      `<li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>${f}</li>`
+    ).join('');
+
+    // Map — OpenStreetMap embed needs no API key and never fails on a text
+    // geocode, unlike a query-based Google Maps embed would for these
+    // estate names.
+    const d = 0.025;
+    const bbox = [estate.lon - d, estate.lat - d, estate.lon + d, estate.lat + d].join(',');
+    document.getElementById('dMap').innerHTML = `<iframe src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${estate.lat},${estate.lon}" loading="lazy" title="Map"></iframe>`;
+    document.getElementById('dMapLink').href = `https://www.openstreetmap.org/?mlat=${estate.lat}&mlon=${estate.lon}#map=13/${estate.lat}/${estate.lon}`;
+
+    document.getElementById('aPhoto').src = agent.photo;
+    document.getElementById('aPhoto').alt = agent.name;
+    document.getElementById('aName').textContent = agent.name;
+    document.getElementById('aTitle').textContent = agent.title;
+    document.getElementById('aPhone').textContent = agent.phone;
+    document.getElementById('aEmail').textContent = agent.email;
+    document.getElementById('aLicense').textContent = agent.license;
+
+    // GALLERY
+    const mainImg = document.getElementById('galleryMainImg');
+    const thumbsEl = document.getElementById('galleryThumbs');
+    const countEl = document.getElementById('galleryCount');
+    let activeIdx = 0;
+    function setMain(i) {
+      activeIdx = i;
+      mainImg.classList.remove('loaded');
+      mainImg.src = estate.gallery[i];
+      mainImg.alt = estate.name + ' photo ' + (i + 1);
+      mainImg.onload = () => mainImg.classList.add('loaded');
+      countEl.textContent = (i + 1) + ' / ' + estate.gallery.length;
+      thumbsEl.querySelectorAll('.gallery-thumb').forEach((t, ti) => t.classList.toggle('active', ti === i));
+    }
+    thumbsEl.innerHTML = estate.gallery.map((src, i) =>
+      `<div class="gallery-thumb" data-i="${i}"><img src="${src}" alt="${estate.name} thumbnail ${i + 1}" loading="lazy"></div>`
+    ).join('');
+    thumbsEl.querySelectorAll('.gallery-thumb').forEach(t => t.addEventListener('click', () => setMain(Number(t.dataset.i))));
+    setMain(0);
+
+    // LIGHTBOX
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    function openLightbox() { lightboxImg.src = estate.gallery[activeIdx]; lightbox.classList.add('open'); }
+    function closeLightbox() { lightbox.classList.remove('open'); }
+    function stepLightbox(dir) { setMain((activeIdx + dir + estate.gallery.length) % estate.gallery.length); lightboxImg.src = estate.gallery[activeIdx]; }
+    document.getElementById('galleryMain').addEventListener('click', openLightbox);
+    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+    document.getElementById('lightboxPrev').addEventListener('click', () => stepLightbox(-1));
+    document.getElementById('lightboxNext').addEventListener('click', () => stepLightbox(1));
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    window.addEventListener('keydown', e => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') stepLightbox(-1);
+      if (e.key === 'ArrowRight') stepLightbox(1);
+    });
+
+    // SIMILAR ESTATES — same tag first, then fill with anything else, excluding this one
+    const others = Object.keys(ESTATES).filter(k => k !== id);
+    const sameType = others.filter(k => ESTATES[k].tag === estate.tag);
+    const rest = others.filter(k => ESTATES[k].tag !== estate.tag);
+    const similarIds = sameType.concat(rest).slice(0, 3);
+    document.getElementById('similarGrid').innerHTML = similarIds.map(k => {
+      const e = ESTATES[k];
+      return `<a class="similar-card fade-up" href="estate-detail.html?id=${k}">
+        <img src="${e.gallery[0]}" alt="${e.name}" loading="lazy">
+        <div class="similar-overlay"><div class="similar-name">${e.name}</div><div class="similar-loc">${e.location}</div></div>
+      </a>`;
+    }).join('');
+
+    // Pre-fill the inquiry message with this property's name once fields exist.
+    document.getElementById('if-message').value = `I'm interested in ${estate.name} (${estate.location}).`;
+
+    const fadeObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); fadeObserver.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-up').forEach((el, i) => {
+      el.style.transitionDelay = Math.min(i % 6, 5) * 0.06 + 's';
+      fadeObserver.observe(el);
+    });
+
+    const inquireForm = document.getElementById('inquireForm');
+    const inquireSuccess = document.getElementById('inquireSuccess');
+    inquireForm.addEventListener('submit', e => {
+      if (inquireForm.action.includes('YOUR_FORM_ID')) {
+        e.preventDefault();
+        inquireForm.style.display = 'none';
+        inquireSuccess.classList.add('show');
+      }
+    });
+  </script>
+</body>
+</html>

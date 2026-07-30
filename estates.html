@@ -86,6 +86,21 @@
   .listing-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(24px, 2.4vw, 32px); font-weight: 600; color: var(--black); margin: 16px 0 4px; }
   .listing-loc { font-size: 13px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--gray); }
   .listing-desc { font-size: 15px; color: var(--gray); line-height: 1.75; margin-top: 20px; max-width: 440px; }
+  .listing-view { display: inline-block; margin-top: 18px; font-size: 12.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--orange); transition: transform .2s ease; }
+  .listing-row:hover .listing-view { transform: translateX(4px); }
+
+  /* ─── LISTINGS TOOLBAR (filter chips + search) ─── */
+  .listings-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; margin-bottom: 46px; }
+  .filter-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+  .filter-chip { background: none; border: 1.5px solid var(--border); color: var(--gray); font-size: 12.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; padding: 10px 18px; cursor: pointer; transition: border-color .2s ease, color .2s ease, background .2s ease; }
+  .filter-chip:hover { border-color: var(--orange); color: var(--orange); }
+  .filter-chip.active { background: var(--black); border-color: var(--black); color: #fff; }
+  .listings-search { border: 1.5px solid var(--border); background: none; padding: 11px 18px; font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; color: var(--black); outline: none; min-width: 240px; transition: border-color .2s ease; }
+  .listings-search:focus { border-color: var(--orange); }
+  .listings-search::placeholder { color: var(--gray); }
+  .listings-empty { display: none; text-align: center; padding: 60px 0; color: var(--gray); font-size: 15px; }
+  .listings-empty.show { display: block; }
+  .listing-row.filtered-out { display: none; }
 
   #cta-band { padding: 20px 0 130px; text-align: center; }
   #cta-band .section-sub { margin: 18px auto 34px; }
@@ -117,6 +132,8 @@
   @media (max-width: 700px) {
     .listing-row, .listing-row.reverse { grid-template-columns: 1fr; gap: 26px; padding: 40px 0; }
     .listing-row.reverse .listing-media, .listing-row.reverse .listing-copy { order: initial; }
+    .listings-toolbar { flex-direction: column; align-items: stretch; }
+    .listings-search { min-width: 0; }
   }
   @media (max-width: 600px) {
     .footer-top { grid-template-columns: 1fr; }
@@ -132,6 +149,7 @@
       </a>
       <ul class="nav-links">
         <li><a href="estates.html">Estates</a></li>
+        <li><a href="agents.html">Agents</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="index.html#process">Process</a></li>
         <li><a href="contact.html" class="btn-primary">Contact</a></li>
@@ -140,6 +158,7 @@
     </div>
     <div class="nav-mobile" id="mobileMenu">
       <a href="estates.html">Estates</a>
+      <a href="agents.html">Agents</a>
       <a href="services.html">Services</a>
       <a href="index.html#process">Process</a>
       <a href="contact.html">Contact</a>
@@ -227,115 +246,138 @@
 
   <section id="listings">
     <div class="container">
-      <div class="listings-rows">
-        <div class="listing-row fade-up">
+      <div class="listings-toolbar fade-up">
+        <div class="filter-chips" id="filterChips">
+          <button class="filter-chip active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="Villa">Villa</button>
+          <button class="filter-chip" data-filter="Estate">Estate</button>
+          <button class="filter-chip" data-filter="Residence">Residence</button>
+          <button class="filter-chip" data-filter="Manor">Manor</button>
+        </div>
+        <input type="text" id="listingsSearch" class="listings-search" placeholder="Search by name or location...">
+      </div>
+      <p class="listings-empty" id="listingsEmpty">No estates match that search — try a different name, location, or filter.</p>
+      <div class="listings-rows" id="listingsRows">
+        <a class="listing-row fade-up" data-tag="Villa" data-search="the solmar residence coastal ridge" href="estate-detail.html?id=solmar-residence">
           <div class="listing-media"><img src="meridian-estate-2.jpg" alt="The Solmar Residence oceanfront exterior" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Villa</span>
             <h3 class="listing-name">The Solmar Residence</h3>
             <div class="listing-loc">Coastal Ridge</div>
             <p class="listing-desc">Floor-to-ceiling glass meets an infinity edge that dissolves into the horizon — waking up here means waking up on the water.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
-        <div class="listing-row reverse fade-up">
+        </a>
+        <a class="listing-row reverse fade-up" data-tag="Estate" data-search="villa aurelia highland point" href="estate-detail.html?id=villa-aurelia">
           <div class="listing-media"><img src="meridian-estate-5.jpg" alt="Villa Aurelia mountain cliffside exterior" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Estate</span>
             <h3 class="listing-name">Villa Aurelia</h3>
             <div class="listing-loc">Highland Point</div>
             <p class="listing-desc">Cliffside modern architecture wrapped in glass, with mountain views that stretch to the ridgeline from every principal room.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
-        <div class="listing-row fade-up">
+        </a>
+        <a class="listing-row fade-up" data-tag="Residence" data-search="the meridian house lakeside bluff" href="estate-detail.html?id=meridian-house">
           <div class="listing-media"><img src="meridian-estate-1.jpg" alt="The Meridian House exterior" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Residence</span>
             <h3 class="listing-name">The Meridian House</h3>
             <div class="listing-loc">Lakeside Bluff</div>
             <p class="listing-desc">Cantilevered over the water's edge, where every room frames the lake without a single obstruction.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
-        <div class="listing-row reverse fade-up">
+        </a>
+        <a class="listing-row reverse fade-up" data-tag="Villa" data-search="halcyon villa vineyard hills" href="estate-detail.html?id=halcyon-villa">
           <div class="listing-media"><img src="meridian-estate-3.jpg" alt="Halcyon Villa Tuscan vineyard exterior" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Villa</span>
             <h3 class="listing-name">Halcyon Villa</h3>
             <div class="listing-loc">Vineyard Hills</div>
             <p class="listing-desc">A restored Tuscan estate wrapped in cypress and vine rows, built for slow mornings and long dinners outside.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
-        <div class="listing-row fade-up">
+        </a>
+        <a class="listing-row fade-up" data-tag="Estate" data-search="the ember house desert canyon" href="estate-detail.html?id=ember-house">
           <div class="listing-media"><img src="meridian-estate-4.jpg" alt="The Ember House desert modern exterior" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Estate</span>
             <h3 class="listing-name">The Ember House</h3>
             <div class="listing-loc">Desert Canyon</div>
             <p class="listing-desc">Concrete, glass, and cactus silhouettes against a canyon sunset — desert modern at its most deliberate.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
-        <div class="listing-row reverse fade-up">
+        </a>
+        <a class="listing-row reverse fade-up" data-tag="Residence" data-search="lumen residence cliffside point" href="estate-detail.html?id=lumen-residence">
           <div class="listing-media"><img src="https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?auto=format&fit=crop&w=1200&q=80" alt="Lumen Residence modern luxury villa with pool at dusk" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Residence</span>
             <h3 class="listing-name">Lumen Residence</h3>
             <div class="listing-loc">Cliffside Point</div>
             <p class="listing-desc">A glass-walled perch above the coastline, engineered so the view never competes with the architecture.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
-        <div class="listing-row fade-up">
+        </a>
+        <a class="listing-row fade-up" data-tag="Estate" data-search="the monolith estate ridgeview heights" href="estate-detail.html?id=monolith-estate">
           <div class="listing-media"><img src="https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=1200&q=80" alt="The Monolith Estate exterior" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Estate</span>
             <h3 class="listing-name">The Monolith Estate</h3>
             <div class="listing-loc">Ridgeview Heights</div>
             <p class="listing-desc">Sculptural concrete and steel set against open sky — a study in scale, shadow, and quiet.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
-        <div class="listing-row reverse fade-up">
+        </a>
+        <a class="listing-row reverse fade-up" data-tag="Manor" data-search="sereno manor forest hollow" href="estate-detail.html?id=sereno-manor">
           <div class="listing-media"><img src="https://images.unsplash.com/photo-1566908829550-e6551b00979b?auto=format&fit=crop&w=1200&q=80" alt="Sereno Manor exterior" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Manor</span>
             <h3 class="listing-name">Sereno Manor</h3>
             <div class="listing-loc">Forest Hollow</div>
             <p class="listing-desc">A storybook manor tucked into old-growth forest, where stone chimneys and leaded windows meet total modern comfort.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
-        <div class="listing-row fade-up">
+        </a>
+        <a class="listing-row fade-up" data-tag="Residence" data-search="the ivory house meadowbrook" href="estate-detail.html?id=ivory-house">
           <div class="listing-media"><img src="https://images.unsplash.com/photo-1583765748076-cac46b8c98c1?auto=format&fit=crop&w=1200&q=80" alt="The Ivory House exterior" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Residence</span>
             <h3 class="listing-name">The Ivory House</h3>
             <div class="listing-loc">Meadowbrook</div>
             <p class="listing-desc">Crisp white volumes and oversized windows framing rolling meadowland in every direction.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
-        <div class="listing-row reverse fade-up">
+        </a>
+        <a class="listing-row reverse fade-up" data-tag="Estate" data-search="whispering pines estate north woods" href="estate-detail.html?id=whispering-pines-estate">
           <div class="listing-media"><img src="https://images.unsplash.com/photo-1635111057505-3b7dcc2b72fb?auto=format&fit=crop&w=1200&q=80" alt="Whispering Pines Estate aerial exterior" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Estate</span>
             <h3 class="listing-name">Whispering Pines Estate</h3>
             <div class="listing-loc">North Woods</div>
             <p class="listing-desc">Perched above a private pine forest, with a wraparound deck built for watching the seasons change.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
-        <div class="listing-row fade-up">
+        </a>
+        <a class="listing-row fade-up" data-tag="Manor" data-search="bellevue manor garden district" href="estate-detail.html?id=bellevue-manor">
           <div class="listing-media"><img src="https://images.unsplash.com/photo-1756064173162-326c8e85215d?auto=format&fit=crop&w=1200&q=80" alt="Bellevue Manor exterior" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Manor</span>
             <h3 class="listing-name">Bellevue Manor</h3>
             <div class="listing-loc">Garden District</div>
             <p class="listing-desc">Historic charm fully restored — manicured gardens, wraparound porches, and a footprint built for entertaining.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
-        <div class="listing-row reverse fade-up">
+        </a>
+        <a class="listing-row reverse fade-up" data-tag="Estate" data-search="the ashford estate heritage row" href="estate-detail.html?id=ashford-estate">
           <div class="listing-media"><img src="https://images.unsplash.com/photo-1784916986940-ad230ba858f0?auto=format&fit=crop&w=1200&q=80" alt="The Ashford Estate exterior" loading="lazy"></div>
           <div class="listing-copy">
             <span class="estate-tag">Estate</span>
             <h3 class="listing-name">The Ashford Estate</h3>
             <div class="listing-loc">Heritage Row</div>
             <p class="listing-desc">A landmark address reimagined inside, blending original architectural detail with a fully modern interior.</p>
+            <span class="listing-view">View Details &rarr;</span>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </section>
@@ -365,6 +407,7 @@
           <div class="footer-col-title">Explore</div>
           <ul class="footer-links">
             <li><a href="estates.html">Our Estates</a></li>
+            <li><a href="agents.html">Our Agents</a></li>
             <li><a href="index.html#villa-features">Villa Features</a></li>
             <li><a href="index.html#process">Our Process</a></li>
             <li><a href="index.html#faq">FAQ</a></li>
@@ -402,6 +445,35 @@
     const mobileMenu = document.getElementById('mobileMenu');
     hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
     document.querySelectorAll('.nav-mobile a').forEach(l => l.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+    // FILTER + SEARCH — client-side only (no backend), combines a type
+    // chip with a free-text match against each row's name/location.
+    const filterChips = document.querySelectorAll('.filter-chip');
+    const searchInput = document.getElementById('listingsSearch');
+    const rows = document.querySelectorAll('.listing-row');
+    const emptyState = document.getElementById('listingsEmpty');
+    let activeFilter = 'all';
+    function applyFilters() {
+      const q = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      rows.forEach(row => {
+        const matchesTag = activeFilter === 'all' || row.dataset.tag === activeFilter;
+        const matchesSearch = !q || row.dataset.search.includes(q);
+        const show = matchesTag && matchesSearch;
+        row.classList.toggle('filtered-out', !show);
+        if (show) visible++;
+      });
+      emptyState.classList.toggle('show', visible === 0);
+    }
+    filterChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        filterChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeFilter = chip.dataset.filter;
+        applyFilters();
+      });
+    });
+    searchInput.addEventListener('input', applyFilters);
 
     // COUNT-UP — stat numbers animate from 0 to their target once visible
     const countEls = document.querySelectorAll('.count-up');
