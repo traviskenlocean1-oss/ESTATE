@@ -31,7 +31,7 @@
   .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
 
   /* fade-up on scroll, shared utility */
-  .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.16,.85,.3,1), transform 1s cubic-bezier(.16,.85,.3,1); }
+  .fade-up { opacity: 0; transform: translateY(34px); transition: opacity 1.4s cubic-bezier(.16,.85,.3,1), transform 1.6s cubic-bezier(.16,.85,.3,1); }
   .fade-up.in-view { opacity: 1; transform: translateY(0); }
 
   /* ─── NAV ─── */
@@ -55,9 +55,13 @@
   .pg-hero { padding: calc(var(--nav-h) + 120px) 0 90px; text-align: center; }
   .pg-hero .section-sub { margin: 20px auto 0; }
 
-  /* ─── SERVICES (hairline-divider rows, icon + text — no photos) ─── */
+  /* ─── SERVICES (paired with a sticky photo - was pure text before, no
+     imagery anywhere on this page unlike the rest of the site) ─── */
   #services { padding: 60px 0 130px; }
-  .svc-list { max-width: 900px; margin: 0 auto; }
+  .services-layout { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 64px; align-items: start; }
+  .services-photo { position: sticky; top: calc(var(--nav-h) + 40px); aspect-ratio: 3/4; overflow: hidden; }
+  .services-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .svc-list { max-width: 900px; }
   .svc-row { display: flex; align-items: flex-start; gap: 28px; padding: 38px 2px; border-top: 1px solid var(--border); }
   .svc-row:last-child { border-bottom: 1px solid var(--border); }
   .svc-icon { flex-shrink: 0; width: 52px; height: 52px; border: 1.5px solid var(--orange); color: var(--orange); display: flex; align-items: center; justify-content: center; }
@@ -106,6 +110,8 @@
     .container { padding: 0 24px; }
     .nav-links a:not(.btn-primary), .nav-links .btn-primary { display: none; }
     .nav-hamburger { display: flex; }
+    .services-layout { grid-template-columns: 1fr; }
+    .services-photo { position: static; aspect-ratio: 16/9; }
     .footer-top { grid-template-columns: 1fr 1fr; row-gap: 44px; }
     .svc-row { gap: 20px; }
   }
@@ -152,7 +158,11 @@
   <!-- SERVICES -->
   <section id="services">
     <div class="container">
-      <div class="svc-list">
+      <div class="services-layout">
+        <div class="services-photo fade-up">
+          <img src="https://images.unsplash.com/photo-1741880907168-79a7aaac7875?auto=format&fit=crop&w=1000&q=80" alt="Meridian Estates concierge workspace" loading="lazy">
+        </div>
+        <div class="svc-list">
         <div class="svc-row fade-up">
           <div class="svc-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="8" cy="8" r="5"/><path d="M11.5 11.5 20 20M8 5.5v5M5.5 8h5"/></svg></div>
           <div>
@@ -187,6 +197,7 @@
             <div class="svc-title">Investment Advisory</div>
             <p class="svc-desc">Data-informed guidance on acquisition timing, market cycles, and long-term value — real estate as a real portfolio decision.</p>
           </div>
+        </div>
         </div>
       </div>
     </div>
