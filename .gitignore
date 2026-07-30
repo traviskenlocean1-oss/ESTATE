@@ -5,7 +5,7 @@
 .env*
 !.env.example
 
-# raw source clips - only the extracted hero-frames/*.jpg are served
+# raw source clips - only the concatenated/re-encoded hero.mp4 is served
 shot-exterior.mp4
 shot-foyer.mp4
 shot-pool.mp4

@@ -116,8 +116,8 @@
   /* ─── SCROLL-SCRUB FRAME-SEQUENCE HERO ─── */
   .scrub-wrap { position: relative; height: 700vh; }
   .scrub-pin { position: sticky; top: 0; height: 100vh; min-height: 620px; width: 100%; overflow: hidden; background: #1c1512; }
-  .scrub-canvas {
-    position: absolute; inset: 0; width: 100%; height: 100%;
+  .scrub-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center;
     filter: contrast(1.12) saturate(1.12) brightness(1.02);
   }
   .scrub-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.28) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 68%, rgba(0,0,0,.5) 100%); pointer-events: none; }
@@ -383,7 +383,7 @@
   <section id="hero">
     <div class="scrub-wrap" id="scrub-wrap">
       <div class="scrub-pin" id="scrub-pin">
-        <canvas class="scrub-canvas" id="scrub-canvas"></canvas>
+        <video class="scrub-video" id="scrub-video" muted playsinline preload="none" poster="hero-poster.jpg"></video>
         <div class="scrub-overlay"></div>
         <div class="hero-giant-logo" id="heroGiantLogo"><img src="logo-white.svg" alt="Meridian Estates"></div>
         <div class="scrub-final-overlay" id="scrub-final-overlay"></div>
@@ -755,73 +755,37 @@
     const nav = document.getElementById('navbar');
     window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
 
-    // SCROLL-SCRUB FRAME-SEQUENCE HERO
-    // 159 frames combined from 3 separate Kling generations (exterior -> foyer -> pool),
-    // extracted at 12fps. Same canvas-draw + eased-frame technique used on the Willpower
-    // Solutions site: plain image requests avoid the HTTP Range-request seek problem that
-    // breaks <video> scroll-scrubbing on Cloudflare Workers asset hosting.
-    // Frames are 1440px-class (upscaled from the original 832px Kling
-    // output for sharpness), decimated to every other original frame (158
-    // instead of 315) - half the network+decode work for a scroll speed
-    // the easing loop already smooths over, so the extra in-between frames
-    // weren't buying much. Requesting everything at once on page load used
-    // to saturate the connection; an unbounded "priority" loader later
-    // fired unlimited concurrent requests as the target frame changed every
-    // scroll tick. Both are gone - this caps in-flight requests and lets
-    // priority jump the queue instead of piling on.
-    const HERO_FRAME_COUNT = 158;
-    const heroFramePath = i => `hero-frames/frame-${String(i).padStart(3, '0')}.jpg`;
-    const heroFrames = new Array(HERO_FRAME_COUNT + 1);
-    const heroFrameState = new Array(HERO_FRAME_COUNT + 1).fill(0); // 0 none, 1 queued, 2 loading/done
-    const heroLoadQueue = [];
-    let heroActiveLoads = 0;
-    const HERO_MAX_CONCURRENT = 4;
-    // Measured this directly: scrolling through the hero a second time (same
-    // images, already downloaded) held a rock-solid 60fps, while the first
-    // pass had a single frame that stalled the main thread for 1.3 SECONDS.
-    // That gap is too big to be network - it's JPEG decode. A plain <img>
-    // that's never attached to the DOM still gets decoded, but the browser
-    // does it lazily and synchronously on whatever call first needs the
-    // pixels - here, that's the canvas drawImage() during a scroll tick.
-    // With many large frames finishing download in a cluster, their decodes
-    // pile up into exactly that kind of stall. img.decode() forces decoding
-    // to happen up front, off the main thread, as soon as bytes arrive -
-    // and by not freeing the concurrency slot until decode finishes too, it
-    // naturally spaces decode work out over time instead of dumping it all
-    // into one animation frame.
-    function pumpHeroQueue() {
-      while (heroActiveLoads < HERO_MAX_CONCURRENT && heroLoadQueue.length) {
-        const i = heroLoadQueue.shift();
-        heroFrameState[i] = 2;
-        heroActiveLoads++;
-        const img = new Image();
-        const done = () => { heroActiveLoads--; if (i === 1) drawHeroFrame(1); pumpHeroQueue(); };
-        img.onload = () => (img.decode ? img.decode().catch(() => {}) : Promise.resolve()).then(done);
-        img.onerror = done;
-        img.src = heroFramePath(i);
-        heroFrames[i] = img;
-      }
-    }
-    function ensureHeroFrame(i, priority) {
-      if (i < 1 || i > HERO_FRAME_COUNT) return;
-      if (heroFrameState[i] === 1) {
-        if (priority) { heroLoadQueue.splice(heroLoadQueue.indexOf(i), 1); heroLoadQueue.unshift(i); pumpHeroQueue(); }
-        return;
-      }
-      if (heroFrameState[i]) return;
-      heroFrameState[i] = 1;
-      if (priority) heroLoadQueue.unshift(i); else heroLoadQueue.push(i);
-      pumpHeroQueue();
-    }
-    for (let i = 1; i <= 12; i++) ensureHeroFrame(i, true);
-    for (let i = 13; i <= HERO_FRAME_COUNT; i++) ensureHeroFrame(i, false);
+    // SCROLL-SCRUB HERO — a single pre-composited video (the 3 Kling clips
+    // concatenated, watermark cropped, re-encoded with a keyframe every 6
+    // frames for instant seeking) instead of a JPEG frame sequence drawn to
+    // canvas. That approach kept getting faster to load but never solved
+    // the real problem: an off-DOM <img> only gets decoded - in software,
+    // on the main thread - the first time something actually needs its
+    // pixels, and with many large frames finishing download close together
+    // those decodes piled up into stalls, worst case over a second long.
+    // Video decode is hardware-accelerated, which sidesteps that entirely.
+    //
+    // The catch: Cloudflare Workers static assets don't honor HTTP Range
+    // requests - verified directly, a request for the first 1KB of a
+    // deployed file came back with the whole file and a plain 200, not a
+    // 206 Partial Content. A browser relying on the normal streaming/seek
+    // behavior of <video> would be seeking blind against a server that
+    // can't serve partial content. So instead of a streaming <video src>,
+    // the whole ~10MB file is fetched once as a blob before scrubbing is
+    // enabled - after that, every currentTime seek is served entirely from
+    // memory, no network involved either way.
+    const heroVideo = document.getElementById('scrub-video');
+    let heroVideoReady = false;
+    fetch('hero.mp4')
+      .then(r => r.blob())
+      .then(blob => {
+        heroVideo.src = URL.createObjectURL(blob);
+        return new Promise(resolve => heroVideo.addEventListener('loadedmetadata', resolve, { once: true }));
+      })
+      .then(() => { heroVideoReady = true; scrubTick(); })
+      .catch(() => {});
 
-    const scrubCanvas  = document.getElementById('scrub-canvas');
-    const scrubCtx     = scrubCanvas.getContext('2d');
-    scrubCtx.imageSmoothingEnabled = true;
-    scrubCtx.imageSmoothingQuality = 'high';
     const scrubWrap    = document.getElementById('scrub-wrap');
-    const scrubPin     = document.getElementById('scrub-pin');
     const scrollHint   = document.getElementById('scroll-hint');
     const stageLbl     = document.getElementById('stage-lbl');
     const scrubBar     = document.getElementById('scrub-bar');
@@ -842,50 +806,33 @@
     // Hero copy and the opaque nav only reveal in the final stretch of the tour.
     const REVEAL_AT = 0.99;
 
-    let prevStage = '', raf = false, lastDrawnFrame = -1, lastRequestedFrame = 1;
+    let prevStage = '', raf = false;
 
-    function sizeHeroCanvas() {
-      const dpr = window.devicePixelRatio || 1;
-      scrubCanvas.width = Math.round(scrubPin.clientWidth * dpr);
-      scrubCanvas.height = Math.round(scrubPin.clientHeight * dpr);
-      lastDrawnFrame = -1;
-      drawHeroFrame(Math.max(1, lastRequestedFrame));
-    }
-
-    function drawHeroFrame(n) {
-      lastRequestedFrame = n;
-      let idx = Math.round(n);
-      // Prioritize the frame actually being scrolled to (plus a short
-      // lookahead) over the background queue's sequential order.
-      ensureHeroFrame(idx, true);
-      ensureHeroFrame(idx + 1, true);
-      ensureHeroFrame(idx + 2, true);
-      while (idx > 1 && !(heroFrames[idx] && heroFrames[idx].complete && heroFrames[idx].naturalWidth)) idx--;
-      const img = heroFrames[idx];
-      if (!img || !img.complete || !img.naturalWidth || idx === lastDrawnFrame) return;
-      lastDrawnFrame = idx;
-      const cw = scrubCanvas.width, ch = scrubCanvas.height;
-      const iw = img.naturalWidth, ih = img.naturalHeight;
-      // True full-bleed cover, no cap - always corner to corner, no
-      // pillarbox/backdrop treatment of any kind.
-      const scale = Math.max(cw / iw, ch / ih);
-      const dw = iw * scale, dh = ih * scale;
-      scrubCtx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
-    }
-
-    // Eases the drawn frame toward the scroll-derived target every animation frame,
-    // instead of snapping instantly, so the tour reads as continuous motion.
-    let targetFrame = 1, smoothedFrame = 1, smoothLoopRunning = false;
-    function frameSmoothLoop() {
-      smoothedFrame += (targetFrame - smoothedFrame) * 0.09;
-      if (Math.abs(targetFrame - smoothedFrame) < 0.04) smoothedFrame = targetFrame;
-      drawHeroFrame(smoothedFrame);
-      if (smoothedFrame !== targetFrame) requestAnimationFrame(frameSmoothLoop);
+    // Eases the video's currentTime toward the scroll-derived target every
+    // animation frame, instead of snapping instantly, so the tour reads as
+    // continuous motion - same technique as before, just retargeted from a
+    // frame index to a timestamp. Critically, a new seek is only issued
+    // once the browser reports the previous one finished (the 'seeked'
+    // event) - firing currentTime on every animation frame regardless of
+    // whether the last seek completed queues them up faster than the
+    // decoder can keep up, which measured worse than the JPEG version it
+    // replaced. Waiting for 'seeked' and always seeking to the latest
+    // value (never a stale queued one) fixes that.
+    let targetTime = 0, smoothedTime = 0, smoothLoopRunning = false, seekPending = false;
+    heroVideo.addEventListener('seeked', () => { seekPending = false; });
+    function timeSmoothLoop() {
+      smoothedTime += (targetTime - smoothedTime) * 0.09;
+      if (Math.abs(targetTime - smoothedTime) < 0.02) smoothedTime = targetTime;
+      if (!seekPending && Math.abs(heroVideo.currentTime - smoothedTime) > 0.001) {
+        seekPending = true;
+        try { heroVideo.currentTime = smoothedTime; } catch (e) { seekPending = false; }
+      }
+      if (smoothedTime !== targetTime) requestAnimationFrame(timeSmoothLoop);
       else smoothLoopRunning = false;
     }
-    function requestHeroFrame(n) {
-      targetFrame = n;
-      if (!smoothLoopRunning) { smoothLoopRunning = true; requestAnimationFrame(frameSmoothLoop); }
+    function requestHeroTime(t) {
+      targetTime = t;
+      if (!smoothLoopRunning) { smoothLoopRunning = true; requestAnimationFrame(timeSmoothLoop); }
     }
 
     function scrubProg() {
@@ -895,11 +842,13 @@
 
     function scrubTick() {
       const p = scrubProg();
-      // Frame playback finishes at 96% of the scroll instead of 100%, so
-      // motion stays slow and continuous almost to the very end, leaving
-      // only a brief beat before the headline reveals - not a long empty hold.
-      const frameP = Math.min(1, p / 0.96);
-      requestHeroFrame(1 + frameP * (HERO_FRAME_COUNT - 1));
+      // Playback finishes at 96% of the scroll instead of 100%, so motion
+      // stays slow and continuous almost to the very end, leaving only a
+      // brief beat before the headline reveals - not a long empty hold.
+      if (heroVideoReady) {
+        const frameP = Math.min(1, p / 0.96);
+        requestHeroTime(frameP * heroVideo.duration);
+      }
       scrubBar.style.transform = `scaleX(${p})`;
       scrollHint.style.opacity = p < 0.03 ? 1 : 0;
       heroGiantLogo.style.opacity = String(Math.max(0, 1 - p / 0.07));
@@ -922,14 +871,13 @@
     }
 
     window.addEventListener('scroll', () => { if (!raf) { raf = true; requestAnimationFrame(scrubTick); } }, { passive: true });
-    window.addEventListener('resize', sizeHeroCanvas);
-    sizeHeroCanvas();
+    scrubTick();
 
     // On a back/forward-cache restore the browser keeps the previous scroll
     // position but doesn't replay the events that produced it, so anything
-    // scroll-derived (hero-revealed, the nav logo swap, the scrub canvas)
+    // scroll-derived (hero-revealed, the nav logo swap, the video frame)
     // can end up stale until the next real scroll. Force a resync.
-    window.addEventListener('pageshow', e => { if (e.persisted) { sizeHeroCanvas(); scrubTick(); } });
+    window.addEventListener('pageshow', e => { if (e.persisted) scrubTick(); });
 
     document.getElementById('navLogo').addEventListener('click', e => {
       e.preventDefault();
