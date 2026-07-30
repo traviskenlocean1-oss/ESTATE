@@ -165,19 +165,47 @@
 
   .scrub-bar { position: absolute; bottom: 0; left: 0; height: 3px; width: 100%; background: var(--orange); transform: scaleX(0); transform-origin: left; transition: transform .04s linear; }
 
-  /* ─── OUR ESTATES ─── */
-  #estates { padding: 130px 0; background: var(--white); }
-  .estates-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 56px; flex-wrap: wrap; gap: 24px; }
-  .estates-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
-  .estate-card { position: relative; overflow: hidden; aspect-ratio: 4/3; background: #eee; transition: transform .5s cubic-bezier(.16,.85,.3,1), box-shadow .5s cubic-bezier(.16,.85,.3,1); }
-  .estate-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(0,0,0,.22); }
-  .estate-card img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(var(--img-scale, 1.12)) translateY(var(--parallax-y, 0px)); transition: transform .6s ease; }
-  .estate-card:hover img { --img-scale: 1.16; }
-  .estate-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 55%, rgba(0,0,0,.78)); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px 34px; }
-  .estate-tag { display: inline-block; background: var(--orange); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; padding: 5px 12px; margin-bottom: 12px; width: fit-content; }
-  .estate-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 600; color: #fff; }
-  .estate-loc { font-size: 13px; color: rgba(255,255,255,.7); margin-top: 4px; }
-  @media (max-width: 860px) { .estates-grid { grid-template-columns: 1fr; } }
+  /* ─── OUR ESTATES (pinned scroll-progress showcase — one estate at a time,
+     photo revealed by a scroll-bound circular wipe, same direct-to-scroll
+     binding style as the hero frames and the process door reveal) ─── */
+  #estates { background: #0a0a0a; }
+  .estates-tour-wrap { position: relative; height: 550vh; }
+  .estates-tour-pin { position: sticky; top: 0; height: 100vh; min-height: 640px; overflow: hidden; display: flex; flex-direction: column; }
+  /* #estates prefix for specificity - otherwise the shared .container class's
+     own responsive padding rule (defined later in this stylesheet) wins the
+     cascade tie and wipes out this padding-top on small viewports. */
+  #estates .estates-tour-head { position: relative; z-index: 4; flex-shrink: 0; padding: calc(var(--nav-h) + 40px) 40px 0; }
+  .estates-tour-head .eyebrow, .estates-tour-head .section-title { color: #fff; }
+  .estates-tour-title { display: inline-block; clip-path: inset(0 100% 0 0); }
+  .estates-tour-body { position: relative; flex: 1; display: flex; }
+  .estates-rail { position: relative; z-index: 4; flex-shrink: 0; width: 300px; display: flex; flex-direction: column; justify-content: center; gap: 20px; padding-left: 40px; }
+  .estates-rail-item { position: relative; text-align: left; background: none; border: none; padding: 6px 0 6px 26px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 17px; font-weight: 600; color: rgba(255,255,255,.4); cursor: pointer; transition: color .35s ease, text-shadow .35s ease, transform .35s ease; }
+  .estates-rail-item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 14px; height: 1.5px; background: var(--orange); opacity: 0; transition: opacity .3s ease; }
+  .estates-rail-item:hover { color: rgba(255,255,255,.85); text-shadow: 0 0 9px rgba(255,106,0,.4); transform: translateX(4px); }
+  .estates-rail-item:hover::before { opacity: .7; }
+  .estates-rail-item.active { color: #fff; text-shadow: 0 0 10px rgba(255,106,0,.35); }
+  .estates-rail-item.active::before { opacity: 1; }
+  .estates-stage { position: relative; flex: 1; height: 100%; }
+  .estates-slide { position: absolute; inset: 0; }
+  .estates-slide-image { position: absolute; inset: 0; overflow: hidden; clip-path: circle(calc(var(--reveal-p, 0) * 100%) at 50% 50%); }
+  .estates-slide-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .estates-slide-info { position: absolute; left: 40px; bottom: 56px; z-index: 2; max-width: 440px; padding: 26px 30px; background: rgba(10,10,10,.55); backdrop-filter: blur(10px); border-left: 3px solid var(--orange); opacity: 0; }
+  .estates-slide-info .estate-tag { display: inline-block; background: var(--orange); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; padding: 5px 12px; margin-bottom: 12px; width: fit-content; }
+  .estates-slide-info .estate-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 600; color: #fff; }
+  .estates-slide-info .estate-loc { font-size: 13px; color: rgba(255,255,255,.65); margin-top: 4px; }
+  .estates-slide-info .estate-desc { font-size: 14px; color: rgba(255,255,255,.75); margin-top: 14px; line-height: 1.6; }
+  .estates-tour-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--orange); transform: scaleX(0); transform-origin: left; transition: transform .04s linear; z-index: 4; }
+  .estates-tour-viewall { position: absolute; right: 40px; bottom: 32px; z-index: 4; font-size: 12px; font-weight: 700; letter-spacing: .5px; color: #fff; text-transform: uppercase; opacity: .75; transition: opacity .2s ease; }
+  .estates-tour-viewall:hover { opacity: 1; color: var(--orange); }
+  @media (max-width: 860px) {
+    .estates-tour-wrap { height: 380vh; }
+    #estates .estates-tour-head { padding: calc(var(--nav-h) + 20px) 24px 0; }
+    .estates-tour-body { flex-direction: column; }
+    .estates-rail { flex-direction: row; width: auto; justify-content: flex-start; gap: 18px; padding: 0 20px; overflow-x: auto; }
+    .estates-rail-item { font-size: 13px; padding: 6px 0 6px 18px; white-space: nowrap; }
+    .estates-slide-info { left: 20px; right: 20px; max-width: none; bottom: 24px; padding: 20px; }
+    .estates-tour-viewall { right: 20px; bottom: 16px; }
+  }
 
   /* ─── VILLA FEATURES (photo stack recedes/fades as you scroll, feature grid stays put) ─── */
   #villa-features { padding: 130px 0; background: var(--white); }
@@ -361,68 +389,72 @@
     </div>
   </section>
 
-  <!-- OUR ESTATES -->
+  <!-- OUR ESTATES — pinned scroll-progress showcase, one estate at a time -->
   <section id="estates">
-    <div class="container">
-      <div class="estates-header fade-up">
-        <div>
+    <div class="estates-tour-wrap" id="estatesTourWrap">
+      <div class="estates-tour-pin" id="estatesTourPin">
+        <div class="container estates-tour-head">
           <span class="eyebrow">Curated Listings</span>
-          <h2 class="section-title">OUR ESTATES</h2>
+          <h2 class="section-title estates-tour-title" id="estatesTourTitle">OUR ESTATES</h2>
         </div>
-        <div>
-          <p class="section-sub">Six hand-selected properties. Each one previewed here before it ever reaches a showing.</p>
-          <a href="estates.html" style="display:inline-block;margin-top:16px;font-size:13px;font-weight:700;letter-spacing:.5px;color:var(--orange);text-transform:uppercase;">View All Estates &rarr;</a>
-        </div>
-      </div>
-      <div class="estates-grid">
-        <div class="estate-card fade-up">
-          <img src="meridian-estate-2.jpg" alt="The Solmar Residence oceanfront exterior" loading="lazy">
-          <div class="estate-overlay">
-            <span class="estate-tag">Villa</span>
-            <div class="estate-name">The Solmar Residence</div>
-            <div class="estate-loc">Coastal Ridge</div>
+        <div class="estates-tour-body">
+          <div class="estates-rail" id="estatesRail">
+            <button class="estates-rail-item" type="button">The Solmar Residence</button>
+            <button class="estates-rail-item" type="button">The Meridian House</button>
+            <button class="estates-rail-item" type="button">Halcyon Villa</button>
+            <button class="estates-rail-item" type="button">The Ember House</button>
+            <button class="estates-rail-item" type="button">Lumen Residence</button>
+          </div>
+          <div class="estates-stage">
+            <div class="estates-slide">
+              <div class="estates-slide-image"><img src="meridian-estate-2.jpg" alt="The Solmar Residence oceanfront exterior" loading="lazy"></div>
+              <div class="estates-slide-info">
+                <span class="estate-tag">Villa</span>
+                <div class="estate-name">The Solmar Residence</div>
+                <div class="estate-loc">Coastal Ridge</div>
+                <p class="estate-desc">Floor-to-ceiling glass meets an infinity edge that dissolves into the horizon — waking up here means waking up on the water.</p>
+              </div>
+            </div>
+            <div class="estates-slide">
+              <div class="estates-slide-image"><img src="meridian-estate-1.jpg" alt="The Meridian House exterior" loading="lazy"></div>
+              <div class="estates-slide-info">
+                <span class="estate-tag">Residence</span>
+                <div class="estate-name">The Meridian House</div>
+                <div class="estate-loc">Lakeside Bluff</div>
+                <p class="estate-desc">Cantilevered over the water's edge, where every room frames the lake without a single obstruction.</p>
+              </div>
+            </div>
+            <div class="estates-slide">
+              <div class="estates-slide-image"><img src="meridian-estate-3.jpg" alt="Halcyon Villa Tuscan vineyard exterior" loading="lazy"></div>
+              <div class="estates-slide-info">
+                <span class="estate-tag">Villa</span>
+                <div class="estate-name">Halcyon Villa</div>
+                <div class="estate-loc">Vineyard Hills</div>
+                <p class="estate-desc">A restored Tuscan estate wrapped in cypress and vine rows, built for slow mornings and long dinners outside.</p>
+              </div>
+            </div>
+            <div class="estates-slide">
+              <div class="estates-slide-image"><img src="meridian-estate-4.jpg" alt="The Ember House desert modern exterior" loading="lazy"></div>
+              <div class="estates-slide-info">
+                <span class="estate-tag">Estate</span>
+                <div class="estate-name">The Ember House</div>
+                <div class="estate-loc">Desert Canyon</div>
+                <p class="estate-desc">Concrete, glass, and cactus silhouettes against a canyon sunset — desert modern at its most deliberate.</p>
+              </div>
+            </div>
+            <div class="estates-slide">
+              <div class="estates-slide-image"><img src="https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?auto=format&fit=crop&w=1200&q=80" alt="Lumen Residence modern luxury villa with pool at dusk" loading="lazy"></div>
+              <div class="estates-slide-info">
+                <span class="estate-tag">Residence</span>
+                <div class="estate-name">Lumen Residence</div>
+                <div class="estate-loc">Cliffside Point</div>
+                <p class="estate-desc">A glass-walled perch above the coastline, engineered so the view never competes with the architecture.</p>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="estate-card fade-up">
-          <img src="meridian-estate-5.jpg" alt="Villa Aurelia mountain cliffside exterior" loading="lazy">
-          <div class="estate-overlay">
-            <span class="estate-tag">Estate</span>
-            <div class="estate-name">Villa Aurelia</div>
-            <div class="estate-loc">Highland Point</div>
-          </div>
-        </div>
-        <div class="estate-card fade-up">
-          <img src="meridian-estate-1.jpg" alt="The Meridian House exterior" loading="lazy">
-          <div class="estate-overlay">
-            <span class="estate-tag">Residence</span>
-            <div class="estate-name">The Meridian House</div>
-            <div class="estate-loc">Lakeside Bluff</div>
-          </div>
-        </div>
-        <div class="estate-card fade-up">
-          <img src="meridian-estate-3.jpg" alt="Halcyon Villa Tuscan vineyard exterior" loading="lazy">
-          <div class="estate-overlay">
-            <span class="estate-tag">Villa</span>
-            <div class="estate-name">Halcyon Villa</div>
-            <div class="estate-loc">Vineyard Hills</div>
-          </div>
-        </div>
-        <div class="estate-card fade-up">
-          <img src="meridian-estate-4.jpg" alt="The Ember House desert modern exterior" loading="lazy">
-          <div class="estate-overlay">
-            <span class="estate-tag">Estate</span>
-            <div class="estate-name">The Ember House</div>
-            <div class="estate-loc">Desert Canyon</div>
-          </div>
-        </div>
-        <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?auto=format&fit=crop&w=1200&q=80" alt="Modern luxury villa with pool at dusk" loading="lazy">
-          <div class="estate-overlay">
-            <span class="estate-tag">Residence</span>
-            <div class="estate-name">Lumen Residence</div>
-            <div class="estate-loc">Cliffside Point</div>
-          </div>
-        </div>
+        <a href="estates.html" class="estates-tour-viewall">View All Estates &rarr;</a>
+        <div class="estates-tour-bar" id="estatesTourBar"></div>
       </div>
     </div>
   </section>
@@ -750,10 +782,10 @@
 
     function scrubTick() {
       const p = scrubProg();
-      // Frame playback finishes at 82% of the scroll instead of 100%, so the
-      // last stretch just holds on the final pool frame - real dwell time to
-      // actually look at the pool before the headline reveals.
-      const frameP = Math.min(1, p / 0.82);
+      // Frame playback finishes at 96% of the scroll instead of 100%, so
+      // motion stays slow and continuous almost to the very end, leaving
+      // only a brief beat before the headline reveals - not a long empty hold.
+      const frameP = Math.min(1, p / 0.96);
       requestHeroFrame(1 + frameP * (HERO_FRAME_COUNT - 1));
       scrubBar.style.transform = `scaleX(${p})`;
       scrollHint.style.opacity = p < 0.03 ? 1 : 0;
@@ -836,32 +868,68 @@
     }, { threshold: 0.3 });
     processRows.forEach((el, i) => { el.style.transitionDelay = (i * 0.1) + 's'; rowObserver.observe(el); });
 
-    // PARALLAX — estate card photos drift slightly slower than the scroll
-    // itself (classic subtle parallax), oversized via --img-scale so the
-    // drift never reveals an edge.
-    const parallaxImgs = Array.from(document.querySelectorAll('.estate-card img'));
-    function parallaxTick() {
-      const vh = window.innerHeight;
-      parallaxImgs.forEach(img => {
-        const rect = img.getBoundingClientRect();
-        const center = rect.top + rect.height / 2;
-        const offset = (center - vh / 2) / vh; // -0.5 .. 0.5 roughly
-        img.style.setProperty('--parallax-y', (offset * 26) + 'px');
-      });
-    }
-    window.addEventListener('scroll', () => requestAnimationFrame(parallaxTick), { passive: true });
-    parallaxTick();
+    // OUR ESTATES — pinned scroll-progress showcase. Scroll position maps
+    // directly to (a) which estate is active and (b) how far its circular
+    // photo reveal has progressed - same direct-to-scroll binding as the
+    // hero frames and the process door, so it opens exactly as slowly as
+    // you scroll rather than on a fixed-duration timer.
+    (function () {
+      const wrap = document.getElementById('estatesTourWrap');
+      const title = document.getElementById('estatesTourTitle');
+      const bar = document.getElementById('estatesTourBar');
+      const railItems = Array.from(document.querySelectorAll('.estates-rail-item'));
+      const slides = Array.from(document.querySelectorAll('.estates-slide'));
+      if (!wrap || !slides.length) return;
+      const N = slides.length;
 
-    // FADE-UP — shared, slow and calm on purpose. Estate cards get a slight
-    // stagger so the grid feels handcrafted rather than all snapping in at once.
+      function tourProg() {
+        const t = wrap.offsetTop, h = wrap.offsetHeight, vh = window.innerHeight;
+        return Math.max(0, Math.min(1, (window.scrollY - t) / (h - vh)));
+      }
+
+      function tourTick() {
+        const p = tourProg();
+        if (bar) bar.style.transform = `scaleX(${p})`;
+        title.style.clipPath = `inset(0 ${(1 - Math.min(1, p / 0.14)) * 100}% 0 0)`;
+
+        const raw = Math.min(N - 0.0001, p * N);
+        const index = Math.max(0, Math.min(N - 1, Math.floor(raw)));
+        const localP = raw - index;
+
+        slides.forEach((slide, i) => {
+          const img = slide.querySelector('.estates-slide-image');
+          const info = slide.querySelector('.estates-slide-info');
+          const reveal = i < index ? 1 : i > index ? 0 : localP;
+          img.style.setProperty('--reveal-p', reveal);
+          // Only the active caption (and briefly, the outgoing one during the
+          // crossfade) is ever shown - otherwise every already-visited estate's
+          // translucent caption card stays stacked forever and bleeds together.
+          let infoOp = 0;
+          if (i === index) infoOp = Math.max(0, Math.min(1, (localP - 0.08) / 0.3));
+          else if (i === index - 1) infoOp = Math.max(0, Math.min(1, 1 - localP / 0.25));
+          info.style.opacity = String(infoOp);
+        });
+        railItems.forEach((item, i) => item.classList.toggle('active', i === index));
+      }
+
+      window.addEventListener('scroll', () => requestAnimationFrame(tourTick), { passive: true });
+      window.addEventListener('resize', tourTick);
+      tourTick();
+
+      railItems.forEach((item, i) => {
+        item.addEventListener('click', () => {
+          const t = wrap.offsetTop, h = wrap.offsetHeight, vh = window.innerHeight;
+          window.scrollTo({ top: t + ((i + 0.5) / N) * (h - vh), behavior: 'smooth' });
+        });
+      });
+    })();
+
+    // FADE-UP — shared, slow and calm on purpose.
     const fadeEls = document.querySelectorAll('.fade-up');
     const fadeObserver = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); fadeObserver.unobserve(e.target); } });
     }, { threshold: 0.15 });
     fadeEls.forEach(el => fadeObserver.observe(el));
-    document.querySelectorAll('.estates-grid .estate-card').forEach((el, i) => {
-      el.style.transitionDelay = (i % 3) * 0.12 + 's';
-    });
     document.querySelectorAll('#stats .fade-up').forEach((el, i) => {
       el.style.transitionDelay = i * 0.1 + 's';
     });
