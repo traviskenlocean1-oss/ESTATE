@@ -104,15 +104,6 @@
   /* ─── SCROLL-SCRUB FRAME-SEQUENCE HERO ─── */
   .scrub-wrap { position: relative; height: 700vh; }
   .scrub-pin { position: sticky; top: 0; height: 100vh; min-height: 620px; width: 100%; overflow: hidden; background: #0a0a0a; }
-  /* Fills the space around the sharp (capped-scale) canvas frame on wide
-     screens with a soft blurred extension of the same frame instead of
-     empty black bars - same trick Spotify/YouTube use for mismatched
-     aspect ratios. Sits behind the canvas; shows through wherever the
-     canvas is transparent. */
-  .scrub-bg-blur {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-    transform: scale(1.15); filter: blur(60px) brightness(.55) saturate(1.2);
-  }
   .scrub-canvas {
     position: absolute; inset: 0; width: 100%; height: 100%;
     filter: contrast(1.12) saturate(1.12) brightness(1.02);
@@ -325,18 +316,18 @@
         <img src="logo.svg" alt="Meridian Estates" class="logo-black">
       </a>
       <ul class="nav-links">
-        <li><a href="#estates">Estates</a></li>
+        <li><a href="estates.html">Estates</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="#process">Process</a></li>
-        <li><a href="services.html" class="btn-primary">Contact</a></li>
+        <li><a href="contact.html" class="btn-primary">Contact</a></li>
       </ul>
       <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
     </div>
     <div class="nav-mobile" id="mobileMenu">
-      <a href="#estates">Estates</a>
+      <a href="estates.html">Estates</a>
       <a href="services.html">Services</a>
       <a href="#process">Process</a>
-      <a href="services.html">Contact</a>
+      <a href="contact.html">Contact</a>
     </div>
   </nav>
 
@@ -344,7 +335,6 @@
   <section id="hero">
     <div class="scrub-wrap" id="scrub-wrap">
       <div class="scrub-pin" id="scrub-pin">
-        <img class="scrub-bg-blur" id="scrub-bg-blur" alt="" aria-hidden="true">
         <canvas class="scrub-canvas" id="scrub-canvas"></canvas>
         <div class="scrub-overlay"></div>
         <div class="hero-giant-logo" id="heroGiantLogo"><img src="logo-white.svg" alt="Meridian Estates"></div>
@@ -356,8 +346,8 @@
               <h1 class="scrub-h1" id="scrub-h1">HOMES THAT FEEL<br>LIKE YOU'VE<br><span class="orange">ARRIVED.</span></h1>
               <p class="scrub-sub" id="scrub-sub">Curated luxury estates, private showings, and a path from first look to keys in hand — no detail overlooked.</p>
               <div class="scrub-ctas" id="scrub-ctas">
-                <a href="#estates" class="btn-primary">View Our Estates</a>
-                <a href="services.html" class="btn-outline">Contact Us</a>
+                <a href="estates.html" class="btn-primary">View Our Estates</a>
+                <a href="contact.html" class="btn-outline">Contact Us</a>
               </div>
             </div>
           </div>
@@ -379,11 +369,14 @@
           <span class="eyebrow">Curated Listings</span>
           <h2 class="section-title">OUR ESTATES</h2>
         </div>
-        <p class="section-sub">Six hand-selected properties. Each one previewed here before it ever reaches a showing.</p>
+        <div>
+          <p class="section-sub">Six hand-selected properties. Each one previewed here before it ever reaches a showing.</p>
+          <a href="estates.html" style="display:inline-block;margin-top:16px;font-size:13px;font-weight:700;letter-spacing:.5px;color:var(--orange);text-transform:uppercase;">View All Estates &rarr;</a>
+        </div>
       </div>
       <div class="estates-grid">
         <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80" alt="Modern luxury estate exterior" loading="lazy">
+          <img src="meridian-estate-2.jpg" alt="The Solmar Residence oceanfront exterior" loading="lazy">
           <div class="estate-overlay">
             <span class="estate-tag">Villa</span>
             <div class="estate-name">The Solmar Residence</div>
@@ -391,7 +384,7 @@
           </div>
         </div>
         <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80" alt="Modern luxury villa exterior" loading="lazy">
+          <img src="meridian-estate-5.jpg" alt="Villa Aurelia mountain cliffside exterior" loading="lazy">
           <div class="estate-overlay">
             <span class="estate-tag">Estate</span>
             <div class="estate-name">Villa Aurelia</div>
@@ -399,7 +392,7 @@
           </div>
         </div>
         <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80" alt="Contemporary luxury home exterior" loading="lazy">
+          <img src="meridian-estate-1.jpg" alt="The Meridian House exterior" loading="lazy">
           <div class="estate-overlay">
             <span class="estate-tag">Residence</span>
             <div class="estate-name">The Meridian House</div>
@@ -407,7 +400,7 @@
           </div>
         </div>
         <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1706808849780-7a04fbac83ef?auto=format&fit=crop&w=1200&q=80" alt="Modern estate exterior with pool" loading="lazy">
+          <img src="meridian-estate-3.jpg" alt="Halcyon Villa Tuscan vineyard exterior" loading="lazy">
           <div class="estate-overlay">
             <span class="estate-tag">Villa</span>
             <div class="estate-name">Halcyon Villa</div>
@@ -415,7 +408,7 @@
           </div>
         </div>
         <div class="estate-card fade-up">
-          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80" alt="Luxury modern house exterior" loading="lazy">
+          <img src="meridian-estate-4.jpg" alt="The Ember House desert modern exterior" loading="lazy">
           <div class="estate-overlay">
             <span class="estate-tag">Estate</span>
             <div class="estate-name">The Ember House</div>
@@ -626,7 +619,7 @@
         <div>
           <div class="footer-col-title">Explore</div>
           <ul class="footer-links">
-            <li><a href="#estates">Our Estates</a></li>
+            <li><a href="estates.html">Our Estates</a></li>
             <li><a href="#villa-features">Villa Features</a></li>
             <li><a href="#process">Our Process</a></li>
             <li><a href="#faq">FAQ</a></li>
@@ -638,7 +631,7 @@
             <li><a href="services.html">About</a></li>
             <li><a href="services.html">Careers</a></li>
             <li><a href="services.html">Press</a></li>
-            <li><a href="services.html">Contact</a></li>
+            <li><a href="contact.html">Contact</a></li>
           </ul>
         </div>
         <div>
@@ -684,7 +677,6 @@
     }
 
     const scrubCanvas  = document.getElementById('scrub-canvas');
-    const scrubBgBlur  = document.getElementById('scrub-bg-blur');
     const scrubCtx     = scrubCanvas.getContext('2d');
     scrubCtx.imageSmoothingEnabled = true;
     scrubCtx.imageSmoothingQuality = 'high';
@@ -727,19 +719,12 @@
       const img = heroFrames[idx];
       if (!img || !img.complete || !img.naturalWidth || idx === lastDrawnFrame) return;
       lastDrawnFrame = idx;
-      scrubBgBlur.src = img.src;
       const cw = scrubCanvas.width, ch = scrubCanvas.height;
       const iw = img.naturalWidth, ih = img.naturalHeight;
-      // The source footage is portrait (832x1104) but the hero is a wide
-      // landscape container, so true "cover" fit would need to upscale by
-      // 2.3x+ on a typical desktop screen to reach full width - that's the
-      // actual cause of the blur while scrolling, not JPEG quality or fps.
-      // Capping the scale keeps the visible frame sharp; the space around
-      // it (on wide screens) shows the blurred backdrop img instead of
-      // stretching the real footage past its native resolution.
-      const scale = Math.min(Math.max(cw / iw, ch / ih), 1.35);
+      // True full-bleed cover, no cap - always corner to corner, no
+      // pillarbox/backdrop treatment of any kind.
+      const scale = Math.max(cw / iw, ch / ih);
       const dw = iw * scale, dh = ih * scale;
-      scrubCtx.clearRect(0, 0, cw, ch);
       scrubCtx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
     }
 
@@ -765,7 +750,11 @@
 
     function scrubTick() {
       const p = scrubProg();
-      requestHeroFrame(1 + p * (HERO_FRAME_COUNT - 1));
+      // Frame playback finishes at 82% of the scroll instead of 100%, so the
+      // last stretch just holds on the final pool frame - real dwell time to
+      // actually look at the pool before the headline reveals.
+      const frameP = Math.min(1, p / 0.82);
+      requestHeroFrame(1 + frameP * (HERO_FRAME_COUNT - 1));
       scrubBar.style.transform = `scaleX(${p})`;
       scrollHint.style.opacity = p < 0.03 ? 1 : 0;
       heroGiantLogo.style.opacity = String(Math.max(0, 1 - p / 0.07));

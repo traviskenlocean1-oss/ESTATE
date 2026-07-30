@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Meridian Estates — private property acquisition, exclusive off-market listings, portfolio management, concierge relocation, and investment advisory for luxury real estate.">
+<meta name="description" content="Meridian Estates — browse our full collection of curated luxury properties, from coastal villas to mountain retreats.">
 <meta name="robots" content="index, follow">
-<title>Services & Process | Meridian Estates</title>
+<title>Our Estates | Meridian Estates</title>
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 <link rel="apple-touch-icon" href="logo.svg">
 
@@ -30,7 +30,6 @@
   .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--orange); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .5px; padding: 15px 30px; border: none; cursor: pointer; transition: background .2s, transform .15s; text-transform: uppercase; }
   .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
 
-  /* fade-up on scroll, shared utility */
   .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.16,.85,.3,1), transform 1s cubic-bezier(.16,.85,.3,1); }
   .fade-up.in-view { opacity: 1; transform: translateY(0); }
 
@@ -55,35 +54,19 @@
   .pg-hero { padding: calc(var(--nav-h) + 120px) 0 90px; text-align: center; }
   .pg-hero .section-sub { margin: 20px auto 0; }
 
-  /* ─── SERVICES (hairline-divider rows, icon + text — no photos) ─── */
-  #services { padding: 60px 0 130px; }
-  .svc-list { max-width: 900px; margin: 0 auto; }
-  .svc-row { display: flex; align-items: flex-start; gap: 28px; padding: 38px 2px; border-top: 1px solid var(--border); }
-  .svc-row:last-child { border-bottom: 1px solid var(--border); }
-  .svc-icon { flex-shrink: 0; width: 52px; height: 52px; border: 1.5px solid var(--orange); color: var(--orange); display: flex; align-items: center; justify-content: center; }
-  .svc-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 600; color: var(--black); margin-bottom: 8px; }
-  .svc-desc { font-size: 15px; color: var(--gray); line-height: 1.7; max-width: 560px; }
+  /* ─── LISTINGS GRID ─── */
+  #listings { padding: 20px 0 150px; }
+  .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  .estate-card { position: relative; overflow: hidden; aspect-ratio: 4/3; background: #eee; transition: transform .5s cubic-bezier(.16,.85,.3,1), box-shadow .5s cubic-bezier(.16,.85,.3,1); }
+  .estate-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(0,0,0,.22); }
+  .estate-card img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.12); transition: transform .6s ease; }
+  .estate-card:hover img { transform: scale(1.16); }
+  .estate-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 55%, rgba(0,0,0,.78)); display: flex; flex-direction: column; justify-content: flex-end; padding: 26px 28px; }
+  .estate-tag { display: inline-block; background: var(--orange); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; padding: 5px 12px; margin-bottom: 12px; width: fit-content; }
+  .estate-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 600; color: #fff; }
+  .estate-loc { font-size: 13px; color: rgba(255,255,255,.7); margin-top: 4px; }
 
-  /* ─── PROCESS (vertical timeline) ─── */
-  #timeline { padding: 40px 0 150px; background: var(--black); }
-  .timeline-header { text-align: center; margin-bottom: 90px; }
-  .timeline-header .section-title, .timeline-header .eyebrow { color: #fff; }
-  .timeline-header .section-sub { color: rgba(255,255,255,.55); margin-left: auto; margin-right: auto; }
-  .timeline { position: relative; max-width: 720px; margin: 0 auto; }
-  .timeline::before { content: ''; position: absolute; left: 25px; top: 8px; bottom: 8px; width: 1px; background: rgba(255,255,255,.14); }
-  .tl-step { position: relative; display: flex; gap: 32px; padding-bottom: 64px; }
-  .tl-step:last-child { padding-bottom: 0; }
-  .tl-num {
-    flex-shrink: 0; position: relative; z-index: 1; width: 52px; height: 52px; border-radius: 50%;
-    background: var(--black); border: 1.5px solid var(--orange); color: var(--orange);
-    font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 17px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .tl-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 10px; padding-top: 10px; }
-  .tl-desc { font-size: 15px; color: rgba(255,255,255,.55); line-height: 1.75; max-width: 480px; }
-
-  /* ─── CTA BAND ─── */
-  #cta-band { padding: 110px 0; text-align: center; }
+  #cta-band { padding: 20px 0 130px; text-align: center; }
   #cta-band .section-sub { margin: 18px auto 34px; }
 
   /* ─── FOOTER (matches index.html) ─── */
@@ -102,17 +85,16 @@
   .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 26px 0; font-size: 12.5px; color: rgba(255,255,255,.4); }
   .footer-giant { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; text-align: center; line-height: .8; color: rgba(255,106,0,.14); font-size: clamp(46px, 8.6vw, 150px); letter-spacing: -.01em; user-select: none; white-space: nowrap; padding-bottom: .04em; }
 
+  @media (max-width: 1000px) { .listings-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 900px) {
     .container { padding: 0 24px; }
     .nav-links a:not(.btn-primary), .nav-links .btn-primary { display: none; }
     .nav-hamburger { display: flex; }
     .footer-top { grid-template-columns: 1fr 1fr; row-gap: 44px; }
-    .svc-row { gap: 20px; }
   }
-  @media (max-width: 560px) {
+  @media (max-width: 600px) {
+    .listings-grid { grid-template-columns: 1fr; }
     .footer-top { grid-template-columns: 1fr; }
-    .svc-row { flex-direction: column; gap: 16px; }
-    .tl-step { gap: 20px; }
   }
 </style>
 </head>
@@ -141,114 +123,76 @@
 
   <section class="pg-hero">
     <div class="container">
-      <span class="eyebrow fade-up">What We Offer</span>
-      <h1 class="section-title fade-up">SERVICES &amp; PROCESS</h1>
-      <p class="section-sub fade-up">Everything from first search to closing day, handled with the same discretion and attention as the estates themselves.</p>
+      <span class="eyebrow fade-up">Curated Listings</span>
+      <h1 class="section-title fade-up">OUR ESTATES</h1>
+      <p class="section-sub fade-up">The full collection — hand-selected, privately previewed, and available by appointment.</p>
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section id="services">
+  <section id="listings">
     <div class="container">
-      <div class="svc-list">
-        <div class="svc-row fade-up">
-          <div class="svc-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="8" cy="8" r="5"/><path d="M11.5 11.5 20 20M8 5.5v5M5.5 8h5"/></svg></div>
-          <div>
-            <div class="svc-title">Private Property Acquisition</div>
-            <p class="svc-desc">We identify and secure estates matched to your criteria — often before they're ever made public.</p>
-          </div>
+      <div class="listings-grid">
+        <div class="estate-card fade-up">
+          <img src="meridian-estate-2.jpg" alt="The Solmar Residence oceanfront exterior" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Villa</span><div class="estate-name">The Solmar Residence</div><div class="estate-loc">Coastal Ridge</div></div>
         </div>
-        <div class="svc-row fade-up">
-          <div class="svc-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
-          <div>
-            <div class="svc-title">Exclusive Listings &amp; Off-Market Deals</div>
-            <p class="svc-desc">Access to a private network of owners and developers — properties that never reach a public listing site.</p>
-          </div>
+        <div class="estate-card fade-up">
+          <img src="meridian-estate-5.jpg" alt="Villa Aurelia mountain cliffside exterior" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Estate</span><div class="estate-name">Villa Aurelia</div><div class="estate-loc">Highland Point</div></div>
         </div>
-        <div class="svc-row fade-up">
-          <div class="svc-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="14" width="6" height="7"/><rect x="9" y="9" width="6" height="12"/><rect x="15" y="4" width="6" height="17"/></svg></div>
-          <div>
-            <div class="svc-title">Luxury Portfolio Management</div>
-            <p class="svc-desc">Ongoing oversight for multi-property portfolios — valuation tracking, maintenance coordination, and market positioning.</p>
-          </div>
+        <div class="estate-card fade-up">
+          <img src="meridian-estate-1.jpg" alt="The Meridian House exterior" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Residence</span><div class="estate-name">The Meridian House</div><div class="estate-loc">Lakeside Bluff</div></div>
         </div>
-        <div class="svc-row fade-up">
-          <div class="svc-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="2.5"/></svg></div>
-          <div>
-            <div class="svc-title">Concierge Relocation Services</div>
-            <p class="svc-desc">A single point of contact for the move itself — from schools and staff to logistics, handled quietly and completely.</p>
-          </div>
+        <div class="estate-card fade-up">
+          <img src="meridian-estate-3.jpg" alt="Halcyon Villa Tuscan vineyard exterior" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Villa</span><div class="estate-name">Halcyon Villa</div><div class="estate-loc">Vineyard Hills</div></div>
         </div>
-        <div class="svc-row fade-up">
-          <div class="svc-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
-          <div>
-            <div class="svc-title">Investment Advisory</div>
-            <p class="svc-desc">Data-informed guidance on acquisition timing, market cycles, and long-term value — real estate as a real portfolio decision.</p>
-          </div>
+        <div class="estate-card fade-up">
+          <img src="meridian-estate-4.jpg" alt="The Ember House desert modern exterior" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Estate</span><div class="estate-name">The Ember House</div><div class="estate-loc">Desert Canyon</div></div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROCESS TIMELINE -->
-  <section id="timeline">
-    <div class="container">
-      <div class="timeline-header">
-        <span class="eyebrow fade-up">How We Work</span>
-        <h2 class="section-title fade-up">OUR PROCESS</h2>
-        <p class="section-sub fade-up">Five steps, no wasted motion — from the first conversation to keys in hand.</p>
-      </div>
-      <div class="timeline">
-        <div class="tl-step fade-up">
-          <div class="tl-num">01</div>
-          <div>
-            <div class="tl-title">Consultation</div>
-            <p class="tl-desc">We start by understanding your lifestyle, timeline, and investment goals — not just a list of requirements.</p>
-          </div>
+        <div class="estate-card fade-up">
+          <img src="https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?auto=format&fit=crop&w=1200&q=80" alt="Modern luxury villa with pool at dusk" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Residence</span><div class="estate-name">Lumen Residence</div><div class="estate-loc">Cliffside Point</div></div>
         </div>
-        <div class="tl-step fade-up">
-          <div class="tl-num">02</div>
-          <div>
-            <div class="tl-title">Curation</div>
-            <p class="tl-desc">A hand-picked shortlist of properties matched to your criteria, drawn from both public and private inventory.</p>
-          </div>
+        <div class="estate-card fade-up">
+          <img src="https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=1200&q=80" alt="The Monolith Estate exterior" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Estate</span><div class="estate-name">The Monolith Estate</div><div class="estate-loc">Ridgeview Heights</div></div>
         </div>
-        <div class="tl-step fade-up">
-          <div class="tl-num">03</div>
-          <div>
-            <div class="tl-title">Private Viewings</div>
-            <p class="tl-desc">Exclusive, unhurried walkthroughs on your schedule — no open houses, no crowds.</p>
-          </div>
+        <div class="estate-card fade-up">
+          <img src="https://images.unsplash.com/photo-1566908829550-e6551b00979b?auto=format&fit=crop&w=1200&q=80" alt="Sereno Manor exterior" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Manor</span><div class="estate-name">Sereno Manor</div><div class="estate-loc">Forest Hollow</div></div>
         </div>
-        <div class="tl-step fade-up">
-          <div class="tl-num">04</div>
-          <div>
-            <div class="tl-title">Negotiation</div>
-            <p class="tl-desc">We secure the best terms on your behalf, handled with discretion at every step.</p>
-          </div>
+        <div class="estate-card fade-up">
+          <img src="https://images.unsplash.com/photo-1583765748076-cac46b8c98c1?auto=format&fit=crop&w=1200&q=80" alt="The Ivory House exterior" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Residence</span><div class="estate-name">The Ivory House</div><div class="estate-loc">Meadowbrook</div></div>
         </div>
-        <div class="tl-step fade-up">
-          <div class="tl-num">05</div>
-          <div>
-            <div class="tl-title">Seamless Closing</div>
-            <p class="tl-desc">White-glove handling through to ownership — so the only thing left to do is walk in.</p>
-          </div>
+        <div class="estate-card fade-up">
+          <img src="https://images.unsplash.com/photo-1635111057505-3b7dcc2b72fb?auto=format&fit=crop&w=1200&q=80" alt="Whispering Pines Estate aerial exterior" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Estate</span><div class="estate-name">Whispering Pines Estate</div><div class="estate-loc">North Woods</div></div>
+        </div>
+        <div class="estate-card fade-up">
+          <img src="https://images.unsplash.com/photo-1756064173162-326c8e85215d?auto=format&fit=crop&w=1200&q=80" alt="Bellevue Manor exterior" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Manor</span><div class="estate-name">Bellevue Manor</div><div class="estate-loc">Garden District</div></div>
+        </div>
+        <div class="estate-card fade-up">
+          <img src="https://images.unsplash.com/photo-1784916986940-ad230ba858f0?auto=format&fit=crop&w=1200&q=80" alt="The Ashford Estate exterior" loading="lazy">
+          <div class="estate-overlay"><span class="estate-tag">Estate</span><div class="estate-name">The Ashford Estate</div><div class="estate-loc">Heritage Row</div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
   <section id="cta-band">
     <div class="container">
-      <span class="eyebrow fade-up">Ready When You Are</span>
-      <h2 class="section-title fade-up">LET'S FIND YOUR ESTATE</h2>
-      <p class="section-sub fade-up">Reach out for a private consultation — no obligation, just a conversation.</p>
-      <a href="mailto:info@meridianestates.com" class="btn-primary fade-up">info@meridianestates.com</a>
+      <span class="eyebrow fade-up">Don't See What You're Looking For?</span>
+      <h2 class="section-title fade-up">WE HAVE MORE, PRIVATELY</h2>
+      <p class="section-sub fade-up">Many of our estates never reach a public page at all. Reach out and tell us what you're looking for.</p>
+      <a href="contact.html" class="btn-primary fade-up">Start a Private Search</a>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="container">
       <div class="footer-top">
@@ -307,7 +251,7 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); fadeObserver.unobserve(e.target); } });
     }, { threshold: 0.15 });
     document.querySelectorAll('.fade-up').forEach((el, i) => {
-      el.style.transitionDelay = Math.min(i % 5, 4) * 0.08 + 's';
+      el.style.transitionDelay = Math.min(i % 6, 5) * 0.07 + 's';
       fadeObserver.observe(el);
     });
   </script>
