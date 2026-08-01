@@ -1061,7 +1061,7 @@
         }
         requestAnimationFrame(tick);
       });
-    }, { threshold: 0.5 });
+    }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
     countEls.forEach(el => countObserver.observe(el));
 
     // FAQ — accordion, one open at a time
