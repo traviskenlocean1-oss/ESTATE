@@ -25,6 +25,18 @@ const AGENTS = {
     license: 'FL License SL-3401829',
     photo: 'https://images.unsplash.com/photo-1742518424481-b39a7cb4c80e?auto=format&fit=crop&w=500&q=80',
     bio: 'A former architect turned agent, David represents Meridian\'s most sculptural properties — and can talk you through every design decision in them.'
+  },
+  clara: {
+    name: 'Clara Bennett', title: 'Senior Agent — Historic & Heritage Estates', phone: '(561) 555-0184', email: 'clara@meridianestates.com',
+    license: 'FL License SL-3412093',
+    photo: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=500&q=80',
+    bio: 'Clara restores as much as she sells — a background in historic preservation means every landmark listing comes with the provenance, permits, and craftsmen already lined up.'
+  },
+  priya: {
+    name: 'Priya Nandan', title: 'Associate Agent', phone: '(561) 555-0197', email: 'priya@meridianestates.com',
+    license: 'FL License SL-3420117',
+    photo: 'https://images.unsplash.com/photo-1611432579699-484f7990b127?auto=format&fit=crop&w=500&q=80',
+    bio: 'The newest name at Meridian, Priya joined from a top brokerage in Connecticut and is building her book one meticulously matched buyer at a time.'
   }
 };
 
@@ -87,7 +99,7 @@ const ESTATES = {
   },
   'sereno-manor': {
     name: 'Sereno Manor', tag: 'Manor', location: 'Forest Hollow', price: '$4,950,000',
-    beds: 6, baths: 7, sqft: '8,600', lot: '6.0 Acres', year: 1932, style: 'Forest Manor (restored 2018)', agent: 'naomi',
+    beds: 6, baths: 7, sqft: '8,600', lot: '6.0 Acres', year: 1932, style: 'Forest Manor (restored 2018)', agent: 'clara',
     lat: 47.530, lon: -121.820,
     description: "A storybook manor tucked into old-growth forest, where stone chimneys and leaded windows meet total modern comfort. Sereno Manor's 2018 restoration rewired and replumbed the entire house while preserving every original mantel and beam.",
     features: ['Six original stone fireplaces', 'Leaded-glass windows throughout', 'Detached carriage house', 'Old-growth forest surrounding the property', 'Fully restored 1932 millwork', 'Modern geothermal system'],
@@ -95,7 +107,7 @@ const ESTATES = {
   },
   'ivory-house': {
     name: 'The Ivory House', tag: 'Residence', location: 'Meadowbrook', price: '$3,875,000',
-    beds: 4, baths: 4, sqft: '4,200', lot: '1.4 Acres', year: 2019, style: 'Modern Farmhouse', agent: 'naomi',
+    beds: 4, baths: 4, sqft: '4,200', lot: '1.4 Acres', year: 2019, style: 'Modern Farmhouse', agent: 'priya',
     lat: 41.766, lon: -73.929,
     description: "Crisp white volumes and oversized windows framing rolling meadowland in every direction. The Ivory House takes the modern farmhouse form and strips it back further — no applied detail, just proportion, light, and the meadow beyond the glass.",
     features: ['Wraparound covered porch', 'Board-and-batten exterior', 'Open-plan kitchen and great room', 'Detached barn-style studio', 'Meadow and pond views', 'Standing-seam metal roof'],
@@ -111,7 +123,7 @@ const ESTATES = {
   },
   'bellevue-manor': {
     name: 'Bellevue Manor', tag: 'Manor', location: 'Garden District', price: '$5,950,000',
-    beds: 7, baths: 8, sqft: '9,400', lot: '2.2 Acres', year: 1921, style: 'Historic Manor (restored 2015)', agent: 'elena',
+    beds: 7, baths: 8, sqft: '9,400', lot: '2.2 Acres', year: 1921, style: 'Historic Manor (restored 2015)', agent: 'clara',
     lat: 29.928, lon: -90.087,
     description: "Historic charm fully restored — manicured gardens, wraparound porches, and a footprint built for entertaining. Bellevue Manor's 2015 restoration preserved its original ironwork balconies and heart-pine floors while quietly adding a full modern kitchen wing.",
     features: ['Manicured formal gardens', 'Original ironwork balconies', 'Restored heart-pine flooring', 'Ballroom-scale great room', 'Carriage house with two guest suites', 'Full modern kitchen wing'],
@@ -119,7 +131,7 @@ const ESTATES = {
   },
   'ashford-estate': {
     name: 'The Ashford Estate', tag: 'Estate', location: 'Heritage Row', price: '$6,400,000',
-    beds: 5, baths: 6, sqft: '6,800', lot: '1.6 Acres', year: 1908, style: 'Landmark Revival (restored 2022)', agent: 'david',
+    beds: 5, baths: 6, sqft: '6,800', lot: '1.6 Acres', year: 1908, style: 'Landmark Revival (restored 2022)', agent: 'clara',
     lat: 32.776, lon: -79.931,
     description: "A landmark address reimagined inside, blending original architectural detail with a fully modern interior. The Ashford Estate's 2022 restoration kept every original cornice and window casing intact while rebuilding the interior from the studs out.",
     features: ['Landmark-registered facade', 'Restored original cornices and millwork', 'Fully rebuilt modern interior systems', 'Private walled courtyard', 'Widow\'s walk with rooftop views', 'Attached two-car carriage garage'],
